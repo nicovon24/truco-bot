@@ -34,9 +34,28 @@ def train(
         from truco_train.cfr.train import run_mccfr
 
         out = run_mccfr(data, config_path=config.as_posix())
+    elif algorithm == "deep_cfr":
+        from truco_train.deep_cfr.run import run_deep_cfr
+
+        out = run_deep_cfr(data, config_path=config.as_posix())
+    elif algorithm == "ppo":
+        from truco_train.ppo.train import run_ppo
+
+        out = run_ppo(data, config_path=config.as_posix())
     else:
         raise typer.BadParameter(f"algoritmo desconocido: {algorithm}")
     typer.echo(f"Corrida escrita en {out}")
+
+
+@app.command("export")
+def export(
+    config: Annotated[Path, typer.Option("--config", help="YAML con sección export.", exists=True)],
+) -> None:
+    """Exporta la corrida a msgpack/ONNX y escribe models/<nombre>/metadata.json."""
+    from truco_train.export.model import export_model
+
+    out = export_model(_load(config), config_path=config.as_posix())
+    typer.echo(f"Metadata escrita en {out}")
 
 
 @eval_app.command("tournament")

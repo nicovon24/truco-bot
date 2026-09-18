@@ -1,0 +1,128 @@
+{
+  "title": "Elegí el mundo visual de Truco Bot",
+  "question": "El dado asignó la Sede del club. Quedátela, tomá una alternativa o volvé a tirar.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Sede del club de barrio",
+      "kicker": "THE ROLL",
+      "lineage": "salón social de club de barrio: mesas de fórmica, zócalo pintado, tanteador de chapa",
+      "thesis": "La partida se juega en la mesa de fórmica de la sede, bajo el tubo, con el tanteador pintado en la pared.",
+      "palette": ["#8cc7bf", "#1e4d3b", "#7b1e2c", "#e9eef0", "#b8bfc2"],
+      "materials": ["fórmica con canto de aluminio", "esmalte sintético sobre chapa", "tubo fluorescente"],
+      "viewport": "Arriba el tanteador de chapa NOSOTROS/ELLOS; al centro la fórmica con las bazas; abajo tus tres cartas grandes y los cantos legales como carteles.",
+      "risk": "Puede volverse costumbrismo de utilería si los detalles no cumplen una función.",
+      "raised": [
+        {"from": "challenger-quote-grammar", "raise": "Los cantos se escriben como habla citada: «Quiero retruco» es una frase dicha en la mesa, no un botón."},
+        {"from": "challenger-six-pack", "raise": "El modo análisis muestra cada decisión del bot como un instrumento: valor de cada acción y cuál salió."},
+        {"from": "challenger-jackfield", "raise": "Ningún estado depende solo del color: turno, canto pendiente y carta jugada también cambian de forma o de texto."}
+      ]
+    },
+    {
+      "id": "model-pick",
+      "label": "Los palitos",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "tanteo con fósforos en cuadraditos de cinco sobre la mesa",
+      "thesis": "El puntaje se cuenta con fósforos, y toda la interfaz nace de la mesa de madera donde se juntan.",
+      "palette": ["#6b4a2e", "#d9372b", "#f2c230", "#1a1410"],
+      "materials": ["madera de mesa de cocina", "fósforos de cabeza roja", "caja de cartón impresa"],
+      "viewport": "La mesa de madera llena la pantalla; los palitos forman el marcador a los costados; las cartas se apoyan al centro.",
+      "risk": "Es la imagen de truco más repetida: familiar y efectiva, pero previsible."
+    },
+    {
+      "id": "challenger-six-pack",
+      "label": "Seis instrumentos",
+      "verdict": "competitive",
+      "lineage": "panel de instrumentos de vuelo nocturno",
+      "thesis": "La mesa como un panel de instrumentos donde cada decisión del bot se lee como aguja y escala.",
+      "palette": ["#0b0d0c", "#f2f4f3", "#56e39f", "#f0a53a"],
+      "materials": ["panel negro mate", "numerales luminosos"],
+      "viewport": "Seis diales: marcador, turno, truco, envido, bazas y policy del bot.",
+      "case": "Gana en claridad del modo análisis; pierde en identificación: nadie juega truco en una cabina.",
+      "risk": "Se lee como tablero técnico y enfría la mesa.",
+      "hero": "https://impeccable.style/worlds/cards/signals-instruments-night-flight-six-pack-hero.webp"
+    },
+    {
+      "id": "challenger-quote-grammar",
+      "label": "Gramática de comillas",
+      "verdict": "declined",
+      "lineage": "streetwear industrial con palabras entre comillas",
+      "thesis": "Cada zona se nombra con su palabra literal entre comillas.",
+      "palette": ["#ffffff", "#111111", "#ff6a13"],
+      "materials": ["algodón blanco", "nylon negro"],
+      "viewport": "Etiquetas «MESA», «MANO», «CANTOS» en mayúsculas.",
+      "case": "Pierde en identificación y en claridad.",
+      "kept": "Los cantos como habla citada.",
+      "risk": "Pose de moda ajena al truco.",
+      "hero": "https://impeccable.style/worlds/cards/textiles-weave-drape-fashion-industrial-quote-grammar-hero.webp"
+    },
+    {
+      "id": "challenger-jackfield",
+      "label": "Jackfield normalizado",
+      "verdict": "declined",
+      "lineage": "horario de patcheo en sala de máquinas",
+      "thesis": "Estados dibujados por trazo en vez de color.",
+      "palette": ["#0a0a0a", "#ffb000"],
+      "materials": ["vidrio negro", "líneas ámbar"],
+      "viewport": "Carriles numerados con líneas de estado.",
+      "case": "Pierde en ambos ejes.",
+      "kept": "El estado no depende solo del color.",
+      "risk": "Frío y técnico.",
+      "hero": "https://impeccable.style/worlds/cards/operate-b-normalled-jackfield-hero.webp"
+    },
+    {
+      "id": "challenger-yeye",
+      "label": "Tapa de simple yé-yé",
+      "verdict": "declined",
+      "lineage": "tapas de discos pop franceses de los sesenta",
+      "thesis": "Un fondo plano saturado por partida.",
+      "palette": ["#ff7a1a", "#1fb5b0", "#ffffff"],
+      "materials": ["fondo plano", "retrato cálido"],
+      "viewport": "Fondo naranja, logotipo redondeado.",
+      "case": "Pierde en identificación y claridad.",
+      "kept": "Compromiso total con un color de fondo.",
+      "risk": "Decorativo.",
+      "hero": "https://impeccable.style/worlds/cards/posters-covers-sleeves-yeye-pop-sleeve-hero.webp"
+    },
+    {
+      "id": "challenger-dumbar",
+      "label": "Identidad modular",
+      "verdict": "declined",
+      "lineage": "sistema de bloques de color y fotografía",
+      "thesis": "Barras de color que se encastran sobre fotos.",
+      "palette": ["#00a7e1", "#e5007e", "#ffe500", "#3cb44b"],
+      "materials": ["bloques vectoriales", "fotografía"],
+      "viewport": "Barras que cruzan la mesa.",
+      "case": "Pierde en ambos ejes.",
+      "kept": "Una grilla modular estricta.",
+      "risk": "Ruido visual en una tarea de juego.",
+      "hero": "https://impeccable.style/worlds/cards/studio-dumbar-identity-hero.webp"
+    },
+    {
+      "id": "challenger-rain-garden",
+      "label": "Jardín de lluvia",
+      "verdict": "declined",
+      "lineage": "mundo surreal de gravedades",
+      "thesis": "Cada nube con su propia gravedad.",
+      "palette": ["#5f6f66", "#3a6fd8", "#d8453a", "#111111"],
+      "materials": ["simulación de partículas"],
+      "viewport": "Jardín con lluvias cruzadas.",
+      "case": "Pierde en ambos ejes.",
+      "kept": "Movimiento con reglas propias, no decorativo.",
+      "risk": "Distrae del juego.",
+      "hero": "https://impeccable.style/worlds/cards/dream-surreal-impossible-worlds-gravity-rain-garden-hero.webp"
+    }
+  ],
+  "reroll": {"registers": ["safer", "bolder"]},
+  "buildPath": {"value": "code", "toggle": false},
+  "canon": true,
+  "canonCard": {
+    "label": "Estándar de la categoría",
+    "thesis": "La mesa de paño verde de las apps de cartas, bien ejecutada.",
+    "palette": ["#0f5132", "#ffffff", "#f5c542"],
+    "materials": ["paño verde", "cartas con sombra"],
+    "viewport": "Paño verde a pantalla completa, cartas al centro y botones abajo.",
+    "risk": "Indistinguible de cualquier app de cartas."
+  },
+  "steer": true
+}

@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 import pytest
 
 from app.agent_registry import (
@@ -16,6 +17,7 @@ from app.agent_registry import (
 )
 from app.repositories.games import InMemoryGameRepository
 from truco_engine import CONTRACT_VERSION, ENCODE_SIZE, NUM_ACTIONS
+from truco_engine.tabular import TabularPolicy
 
 
 def _meta(tmp_path: Path, payload: bytes = b"modelo", **contract: Any) -> ModelMetadata:
@@ -98,13 +100,35 @@ def test_registry_rejects_invalid_metadata(tmp_path: Path) -> None:
         AgentRegistry.load(tmp_path / "models", tmp_path / "cache")
 
 
-def test_registry_rejects_model_types_not_served_yet(tmp_path: Path) -> None:
+def test_registry_rejects_unloadable_artifact(tmp_path: Path) -> None:
     models = tmp_path / "models" / "cfr-test"
     models.mkdir(parents=True)
     meta = _meta(tmp_path)
     (models / "metadata.json").write_text(json.dumps(meta.model_dump()), encoding="utf-8")
-    with pytest.raises(RegistryError, match="todavía no está soportado"):
+    with pytest.raises(RegistryError, match="no se pudo cargar"):
         AgentRegistry.load(tmp_path / "models", tmp_path / "cache")
+
+
+def test_registry_serves_tabular_model(tmp_path: Path) -> None:
+    policy = TabularPolicy(NUM_ACTIONS)
+    policy.set("c=1.2.3|e=-|m=1|s=0-0|v=-|h=", np.full(NUM_ACTIONS, 1.0 / NUM_ACTIONS))
+    data = policy.to_bytes({"game": {"variant": "sin_envido"}})
+    src = tmp_path / "policy.msgpack"
+    src.write_bytes(data)
+    meta = _meta(tmp_path).model_dump()
+    meta["artifact"] = {
+        "url": src.as_uri(),
+        "sha256": hashlib.sha256(data).hexdigest(),
+        "filename": "policy.msgpack",
+    }
+    models = tmp_path / "models" / "cfr-test"
+    models.mkdir(parents=True)
+    (models / "metadata.json").write_text(json.dumps(meta), encoding="utf-8")
+    reg = AgentRegistry.load(tmp_path / "models", tmp_path / "cache")
+    entry = reg.get("cfr-test")
+    assert entry is not None
+    assert entry.model_version == "0.0.1"
+    assert entry.factory().name == "cfr-test"
 
 
 def test_in_memory_repository() -> None:

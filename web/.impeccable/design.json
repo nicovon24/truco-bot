@@ -1,0 +1,448 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-18T16:26:57.141Z",
+  "title": "Design System: Truco Bot",
+  "extensions": {
+    "colorMeta": {
+      "chapa": {
+        "role": "primary",
+        "displayName": "Bordó chapa",
+        "canonical": "#7b1e2c",
+        "tonalRamp": [
+          "#1e0003",
+          "#4c0111",
+          "#771929",
+          "#9c3d47",
+          "#c25f67",
+          "#e98288",
+          "#ffb1b4",
+          "#ffe8e8"
+        ]
+      },
+      "formica": {
+        "role": "tertiary",
+        "displayName": "Celeste fórmica",
+        "canonical": "#8cc7bf",
+        "tonalRamp": [
+          "#000f0d",
+          "#012c28",
+          "#0c4c47",
+          "#336d66",
+          "#558f87",
+          "#78b2aa",
+          "#9bd7cf",
+          "#c0fdf4"
+        ]
+      },
+      "formica-ink": {
+        "role": "tertiary",
+        "displayName": "Tinta de fórmica",
+        "canonical": "#0f3b35",
+        "tonalRamp": [
+          "#000f0c",
+          "#012c27",
+          "#204a44",
+          "#406a63",
+          "#618c85",
+          "#84afa7",
+          "#a7d4cc",
+          "#ccfaf1"
+        ]
+      },
+      "zocalo": {
+        "role": "secondary",
+        "displayName": "Verde zócalo",
+        "canonical": "#1e4d3b",
+        "tonalRamp": [
+          "#000f08",
+          "#012d1f",
+          "#1d4c3a",
+          "#3e6c59",
+          "#5f8e7a",
+          "#81b29c",
+          "#a5d6c0",
+          "#c9fce5"
+        ]
+      },
+      "zocalo-deep": {
+        "role": "secondary",
+        "displayName": "Verde zócalo hondo",
+        "canonical": "#153a2c",
+        "tonalRamp": [
+          "#000f08",
+          "#062d1f",
+          "#264a3c",
+          "#456a5b",
+          "#668c7b",
+          "#88af9e",
+          "#acd4c2",
+          "#d0fae7"
+        ]
+      },
+      "tubo": {
+        "role": "neutral",
+        "displayName": "Blanco tubo",
+        "canonical": "#e9eef0",
+        "tonalRamp": [
+          "#090c0d",
+          "#222627",
+          "#3f4344",
+          "#5e6264",
+          "#7f8385",
+          "#a1a6a8",
+          "#c5cacc",
+          "#eaeff1"
+        ]
+      },
+      "aluminio": {
+        "role": "neutral",
+        "displayName": "Aluminio",
+        "canonical": "#b8bfc2",
+        "tonalRamp": [
+          "#070c0e",
+          "#212628",
+          "#3d4346",
+          "#5c6265",
+          "#7d8486",
+          "#9fa6a9",
+          "#c3cacd",
+          "#e9f0f3"
+        ]
+      },
+      "aluminio-dark": {
+        "role": "neutral",
+        "displayName": "Aluminio oscuro",
+        "canonical": "#7d868a",
+        "tonalRamp": [
+          "#060c0f",
+          "#1f262a",
+          "#3b4347",
+          "#5a6367",
+          "#7b8488",
+          "#9da7ab",
+          "#c1cbcf",
+          "#e6f0f5"
+        ]
+      },
+      "naipe": {
+        "role": "neutral",
+        "displayName": "Blanco naipe",
+        "canonical": "#fbfbf7",
+        "tonalRamp": [
+          "#0b0b09",
+          "#252522",
+          "#42423f",
+          "#61615e",
+          "#82827f",
+          "#a5a5a1",
+          "#c9c9c5",
+          "#efefeb"
+        ]
+      },
+      "tinta": {
+        "role": "neutral",
+        "displayName": "Tinta",
+        "canonical": "#1b1f1e",
+        "tonalRamp": [
+          "#080c0b",
+          "#222625",
+          "#3f4342",
+          "#5e6261",
+          "#7f8482",
+          "#a1a6a5",
+          "#c5cac9",
+          "#eaf0ee"
+        ]
+      },
+      "oro": {
+        "role": "suit",
+        "displayName": "Oro",
+        "canonical": "#c8901c",
+        "tonalRamp": [
+          "#120900",
+          "#332100",
+          "#583c01",
+          "#805900",
+          "#aa7807",
+          "#d29a2b",
+          "#f8be57",
+          "#ffecce"
+        ]
+      },
+      "copa": {
+        "role": "suit",
+        "displayName": "Copa",
+        "canonical": "#b3261e",
+        "tonalRamp": [
+          "#1f0000",
+          "#4d0001",
+          "#810103",
+          "#b0221b",
+          "#d84c3f",
+          "#ff7464",
+          "#ffb3a8",
+          "#ffe9e5"
+        ]
+      },
+      "espada": {
+        "role": "suit",
+        "displayName": "Espada",
+        "canonical": "#1f4e8c",
+        "tonalRamp": [
+          "#000a21",
+          "#002351",
+          "#10407d",
+          "#3261a1",
+          "#5384c6",
+          "#75a7ec",
+          "#a7ccfe",
+          "#e5effe"
+        ]
+      },
+      "basto": {
+        "role": "suit",
+        "displayName": "Basto",
+        "canonical": "#3e7a2e",
+        "tonalRamp": [
+          "#021000",
+          "#092e00",
+          "#165001",
+          "#367225",
+          "#579448",
+          "#7ab86a",
+          "#9ddd8d",
+          "#cdffc1"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "El nombre Truco Bot pintado en la chapa de la cartelera."
+      },
+      "score": {
+        "displayName": "Score",
+        "purpose": "Números del tanteador; 3rem desde sm."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Encabezados de sección de pantalla, en mayúsculas."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Nombre de rival y, en mayúsculas con ancho 115%, acciones principales."
+      },
+      "canto": {
+        "displayName": "Canto",
+        "purpose": "Frase de cada canto entre comillas angulares."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Descripciones, anotador y mensajes."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Rótulos pintados del tanteador, rótulos de baza y títulos de panel."
+      },
+      "card-index": {
+        "displayName": "Card index",
+        "purpose": "Número del naipe en el color de su palo; 1rem a 1.25rem en la baza."
+      }
+    },
+    "shadows": [
+      {
+        "name": "caida-chapa",
+        "value": "0 4px 8px -3px rgb(0 0 0 / 0.4)",
+        "purpose": "Tanteador, chapa del título, cantos y acciones."
+      },
+      {
+        "name": "canto-formica",
+        "value": "inset 0 0 0 1px rgb(255 255 255 / 0.35), 0 1px 0 1px #7d868a, 0 16px 26px -14px rgb(21 58 44 / 0.6)",
+        "purpose": "Bisel y caída de la mesa de fórmica."
+      },
+      {
+        "name": "naipe-apoyado",
+        "value": "0 2px 0 rgb(0 0 0 / 0.08), 0 8px 14px -8px rgb(15 59 53 / 0.7)",
+        "purpose": "Naipes boca arriba."
+      },
+      {
+        "name": "papel",
+        "value": "0 10px 20px -14px rgb(0 0 0 / 0.8)",
+        "purpose": "Anotador, papel de semilla, panel de análisis."
+      },
+      {
+        "name": "papel-tarjeta",
+        "value": "0 6px 14px -10px rgb(0 0 0 / 0.8)",
+        "purpose": "Tarjetas de rival."
+      },
+      {
+        "name": "globo",
+        "value": "0 6px 12px -8px rgb(0 0 0 / 0.7)",
+        "purpose": "Globo del canto del rival y dorsos."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Curva de todo movimiento de la mesa."
+      },
+      {
+        "name": "viaje-carta",
+        "value": "520ms ease-out-expo; translate + rotate(-7deg) + scale -> rotate(1.5deg) scale(1.02) al 82% -> reposo",
+        "purpose": "FLIP de la carta desde la mano (o los dorsos) hasta su baza."
+      },
+      {
+        "name": "placa",
+        "value": "520ms ease-out-expo; rotateX 0 -> 90deg -> 0",
+        "purpose": "Número del tanteador al cambiar."
+      },
+      {
+        "name": "globo",
+        "value": "260ms ease-out-expo; opacity 0, translateY(6px) scale(0.96) -> reposo",
+        "purpose": "Entrada del globo de canto y de los sellos de baza."
+      },
+      {
+        "name": "estado",
+        "value": "150ms (brillo 110%, 1px al presionar); 200ms ease-out (subida de naipe y tarjeta)",
+        "purpose": "Hover y active de botones y cartas."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "none",
+        "purpose": "Con prefers-reduced-motion no hay viaje, placa ni globo."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Acción de chapa",
+      "kind": "button",
+      "refersTo": "button-chapa",
+      "description": "Acción principal: Repartir, Repartir la siguiente, Otra partida.",
+      "html": "<button class=\"ds-btn-chapa\">Repartir</button>",
+      "css": ".ds-btn-chapa { background: var(--color-chapa, #7b1e2c); color: var(--color-tubo, #e9eef0); min-height: 48px; padding: 0 24px; border: 0; border-radius: 8px; font-family: var(--font-sans, Archivo, sans-serif); font-weight: 800; font-size: 1.125rem; font-stretch: 115%; text-transform: uppercase; letter-spacing: 0.06em; box-shadow: 0 4px 8px -3px rgb(0 0 0 / 0.4); cursor: pointer; transition: filter 150ms, transform 150ms; } .ds-btn-chapa:hover { filter: brightness(1.1); } .ds-btn-chapa:active { transform: translateY(1px); } .ds-btn-chapa:focus-visible { outline: 3px solid var(--color-chapa, #7b1e2c); outline-offset: 3px; } .ds-btn-chapa:disabled { opacity: 0.55; }"
+    },
+    {
+      "name": "Canto",
+      "kind": "button",
+      "refersTo": "button-canto",
+      "description": "Chapita esmaltada con la frase legal de la API entre comillas angulares; el canto silencioso va sin relleno.",
+      "html": "<div class=\"ds-banda\"><button class=\"ds-canto\">«Truco»</button><button class=\"ds-canto\">«Envido»</button><button class=\"ds-canto ds-canto-quiet\">«Me voy al mazo»</button></div>",
+      "css": ".ds-banda { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; background: var(--color-zocalo, #1e4d3b); padding: 12px; border-radius: 12px; } .ds-canto { min-height: 44px; padding: 8px 14px; border: 0; border-radius: 6px; background: var(--color-chapa, #7b1e2c); color: var(--color-tubo, #e9eef0); font-family: var(--font-sans, Archivo, sans-serif); font-weight: 750; font-size: 0.95rem; font-stretch: 105%; box-shadow: 0 4px 8px -3px rgb(0 0 0 / 0.4); cursor: pointer; transition: filter 150ms, transform 150ms; } .ds-canto:hover { filter: brightness(1.1); } .ds-canto:active { transform: translateY(1px); } .ds-canto:focus-visible { outline: 3px solid var(--color-chapa, #7b1e2c); outline-offset: 3px; } .ds-canto-quiet { background: transparent; box-shadow: inset 0 0 0 1px rgb(233 238 240 / 0.55); } .ds-canto-quiet:hover { filter: none; background: rgb(233 238 240 / 0.1); }"
+    },
+    {
+      "name": "Toggle de análisis",
+      "kind": "chip",
+      "refersTo": "toggle-zocalo",
+      "description": "Interruptor que nombra su estado; prendido pasa a fondo zócalo.",
+      "html": "<button class=\"ds-toggle\" aria-pressed=\"false\">Análisis apagado</button> <button class=\"ds-toggle\" aria-pressed=\"true\">Análisis prendido</button>",
+      "css": ".ds-toggle { padding: 6px 10px; border: 0; border-radius: 6px; background: transparent; color: var(--color-zocalo, #1e4d3b); box-shadow: inset 0 0 0 1px rgb(30 77 59 / 0.5); font-family: var(--font-sans, Archivo, sans-serif); font-weight: 700; font-size: 0.875rem; cursor: pointer; transition: background-color 150ms, color 150ms; } .ds-toggle:hover { background: rgb(30 77 59 / 0.1); } .ds-toggle[aria-pressed=true] { background: var(--color-zocalo, #1e4d3b); color: var(--color-tubo, #e9eef0); box-shadow: inset 0 0 0 1px var(--color-zocalo, #1e4d3b); } .ds-toggle:focus-visible { outline: 3px solid var(--color-chapa, #7b1e2c); outline-offset: 3px; }"
+    },
+    {
+      "name": "Campo de semilla",
+      "kind": "input",
+      "refersTo": "input-semilla",
+      "description": "Campo sobre papel, fondo tubo, foco bordó.",
+      "html": "<div class=\"ds-papel\"><label class=\"ds-label\" for=\"ds-seed\">Semilla (opcional, para repetir un reparto)</label><input id=\"ds-seed\" class=\"ds-input\" placeholder=\"Al azar\" inputmode=\"numeric\"></div>",
+      "css": ".ds-papel { background: var(--color-naipe, #fbfbf7); padding: 16px; border-radius: 8px; box-shadow: 0 0 0 1px rgb(0 0 0 / 0.1), 0 10px 20px -14px rgb(0 0 0 / 0.8); } .ds-label { display: block; font-family: var(--font-sans, Archivo, sans-serif); font-size: 0.875rem; font-weight: 650; color: var(--color-tinta, #1b1f1e); } .ds-input { margin-top: 4px; width: 100%; box-sizing: border-box; padding: 10px 12px; border: 0; border-radius: 6px; background: var(--color-tubo, #e9eef0); color: var(--color-tinta, #1b1f1e); font: 400 1rem var(--font-sans, Archivo, sans-serif); box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.15); } .ds-input::placeholder { color: rgb(27 31 30 / 0.45); } .ds-input:focus-visible { outline: 3px solid var(--color-chapa, #7b1e2c); outline-offset: 3px; }"
+    },
+    {
+      "name": "Tarjeta de rival",
+      "kind": "card",
+      "refersTo": "papel",
+      "description": "Opción de rival en la cartelera: papel levemente girado, anillo bordó al elegirla.",
+      "html": "<button class=\"ds-rival\" role=\"radio\" aria-checked=\"true\"><span class=\"ds-rival-top\"><span class=\"ds-rival-name\">Heurístico</span><span class=\"ds-rival-tag\">Elegido</span></span><span class=\"ds-rival-desc\">Reglas fijas: envido con 27+, truco con mano fuerte y algún farol.</span></button>",
+      "css": ".ds-rival { display: block; width: 100%; text-align: left; padding: 12px 16px; border: 0; border-radius: 8px; background: var(--color-naipe, #fbfbf7); color: var(--color-tinta, #1b1f1e); rotate: -0.6deg; box-shadow: 0 0 0 1px rgb(0 0 0 / 0.1), 0 6px 14px -10px rgb(0 0 0 / 0.8); font-family: var(--font-sans, Archivo, sans-serif); cursor: pointer; transition: transform 200ms ease-out; } .ds-rival:hover { transform: translateY(-2px); } .ds-rival[aria-checked=true] { box-shadow: 0 0 0 3px var(--color-chapa, #7b1e2c), 0 6px 14px -10px rgb(0 0 0 / 0.8); } .ds-rival:focus-visible { outline: 3px solid var(--color-chapa, #7b1e2c); outline-offset: 3px; } .ds-rival-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; } .ds-rival-name { font-size: 1.25rem; font-weight: 800; font-stretch: 110%; } .ds-rival-tag { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--color-zocalo, #1e4d3b); } .ds-rival-desc { display: block; margin-top: 4px; font-size: 0.875rem; line-height: 1.375; color: rgb(27 31 30 / 0.8); }"
+    },
+    {
+      "name": "Tanteador",
+      "kind": "custom",
+      "refersTo": "tanteador",
+      "description": "Chapa bordó con cuatro remaches, rótulos expandidos y números condensados.",
+      "html": "<section class=\"ds-tanteador\"><i class=\"ds-remache\" style=\"left:8px;top:8px\"></i><i class=\"ds-remache\" style=\"right:8px;top:8px\"></i><i class=\"ds-remache\" style=\"left:8px;bottom:8px\"></i><i class=\"ds-remache\" style=\"right:8px;bottom:8px\"></i><div class=\"ds-col\"><span class=\"ds-rot\">Nosotros</span><span class=\"ds-num\">7</span></div><div class=\"ds-mid\"><span>A 15</span><span class=\"ds-filete\"></span><span>mano 4</span></div><div class=\"ds-col\"><span class=\"ds-rot\">Heurístico</span><span class=\"ds-num\">5</span></div></section>",
+      "css": ".ds-tanteador { position: relative; display: flex; align-items: stretch; padding: 10px 12px 8px; border-radius: 12px; background: var(--color-chapa, #7b1e2c); color: var(--color-tubo, #e9eef0); box-shadow: 0 4px 8px -3px rgb(0 0 0 / 0.4); font-family: var(--font-sans, Archivo, sans-serif); font-variant-numeric: tabular-nums; } .ds-remache { position: absolute; width: 6px; height: 6px; border-radius: 999px; background: var(--color-aluminio, #b8bfc2); } .ds-col { flex: 1; display: flex; flex-direction: column; align-items: center; } .ds-rot { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.18em; font-stretch: 125%; } .ds-num { font-size: 2.25rem; font-weight: 800; line-height: 1; font-stretch: 75%; } .ds-mid { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 8px; font-size: 0.7rem; font-weight: 700; } .ds-filete { width: 1px; height: 32px; margin: 4px 0; background: rgb(233 238 240 / 0.4); }"
+    },
+    {
+      "name": "Naipe",
+      "kind": "custom",
+      "refersTo": "naipe-mano",
+      "description": "Naipe blanco 5:8 con marco del color del palo, número condensado y palo en SVG propio.",
+      "html": "<div class=\"ds-naipe\" role=\"img\" aria-label=\"4 de espada\"><span class=\"ds-marco\"></span><span class=\"ds-idx ds-idx-a\">4</span><svg class=\"ds-palo\" viewBox=\"0 0 40 40\" aria-hidden=\"true\"><g fill=\"#1f4e8c\"><path d=\"M20 3.5 22.4 8v17.5h-4.8V8Z\"/><rect x=\"12\" y=\"25.2\" width=\"16\" height=\"3\" rx=\"1.5\"/><rect x=\"18.4\" y=\"28\" width=\"3.2\" height=\"6.4\" rx=\"1\"/><circle cx=\"20\" cy=\"36\" r=\"2.2\"/></g></svg><span class=\"ds-idx ds-idx-b\">4</span></div>",
+      "css": ".ds-naipe { position: relative; width: 4.9rem; aspect-ratio: 5 / 8; border-radius: 10% / 6%; background: var(--color-naipe, #fbfbf7); box-shadow: 0 0 0 1px rgb(0 0 0 / 0.1), 0 2px 0 rgb(0 0 0 / 0.08), 0 8px 14px -8px rgb(15 59 53 / 0.7); transition: transform 200ms ease-out; } .ds-naipe:hover { transform: translateY(-8px); } .ds-marco { position: absolute; inset: 7%; border: 1px solid var(--color-espada, #1f4e8c); border-radius: 6% / 4%; } .ds-idx { position: absolute; padding: 0 1px; background: var(--color-naipe, #fbfbf7); color: var(--color-espada, #1f4e8c); font-family: var(--font-sans, Archivo, sans-serif); font-weight: 750; font-size: 1.5rem; line-height: 1; font-stretch: 80%; } .ds-idx-a { left: 12%; top: 9%; } .ds-idx-b { right: 12%; bottom: 9%; } .ds-palo { position: absolute; left: 18%; right: 18%; top: 50%; transform: translateY(-50%); }"
+    },
+    {
+      "name": "Fórmica",
+      "kind": "card",
+      "refersTo": "formica-mesa",
+      "description": "La mesa: celeste con reflejo del tubo, canto de aluminio y bisel; hueco de baza y sello de resultado.",
+      "html": "<section class=\"ds-formica\"><span class=\"ds-baza-rot\">1ª baza</span><span class=\"ds-hueco\"></span><span class=\"ds-sello\">Tuya</span></section>",
+      "css": ".ds-formica { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 16px 24px; border-radius: 12px; border: 3px solid var(--color-aluminio, #b8bfc2); background: linear-gradient(172deg, rgb(255 255 255 / 0.22) 0, rgb(255 255 255 / 0) 22%), var(--color-formica, #8cc7bf); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.35), 0 1px 0 1px var(--color-aluminio-dark, #7d868a), 0 16px 26px -14px rgb(21 58 44 / 0.6); font-family: var(--font-sans, Archivo, sans-serif); } .ds-baza-rot { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; color: var(--color-formica-ink, #0f3b35); } .ds-hueco { display: block; width: 4rem; aspect-ratio: 5 / 8; border-radius: 10% / 6%; border: 2px dashed rgb(15 59 53 / 0.3); } .ds-sello { padding: 2px 6px; border-radius: 2px; background: var(--color-zocalo, #1e4d3b); color: var(--color-tubo, #e9eef0); font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Sede del club de barrio",
+    "overview": "La partida se juega en la mesa de fórmica celeste de la sede del club, bajo la luz blanca del tubo, con el tanteador de chapa bordó colgado en la pared. Todo el sistema sale de esos materiales: la pared blanca con zócalo verde inglés, la fórmica moteada con canto de aluminio, la chapa esmaltada con remaches, el naipe blanco y el papel del anotador. No hay superficie que no sea uno de esos objetos.\n\nLa densidad es de mesa, no de tablero: una columna central (tanteador, dorsos del rival, fórmica con tres bazas, banda verde con cantos y la mano propia) y, en escritorio, el anotador de papel a la izquierda y el panel de análisis a la derecha. La tipografía es una sola familia, Archivo, que cambia de ancho según el objeto: expandida y negra para los rótulos pintados de chapa, condensada para los números del tanteador y de los naipes, normal para el texto.\n\nEl sistema rechaza el paño verde de casino y la botonera de formulario: los cantos son chapitas esmaltadas con la frase entre comillas, y la acción principal es tocar una carta.",
+    "keyCharacteristics": [
+      "Materiales con nombre propio: pared (tubo + zócalo), fórmica, chapa, aluminio, naipe, tinta.",
+      "Una sola familia tipográfica variable en ancho (Archivo, `wdth` 75 a 125).",
+      "Bordó de chapa como único color de acción; verde zócalo como banda de turno y estado.",
+      "Naipes y palos dibujados en SVG propio, con los cuatro colores de palo reservados al naipe.",
+      "Movimiento físico y corto: la carta viaja a su baza, los números giran como placas."
+    ],
+    "rules": [
+      {
+        "name": "The Una Chapa Rule",
+        "body": "El bordó es el color de lo que se toca o se canta. Si algo es bordó y no es tanteador, dorso, acción o error, sobra.",
+        "section": "colors"
+      },
+      {
+        "name": "The Palo Encerrado Rule",
+        "body": "Oro, copa, espada y basto no salen del naipe: no se usan para estados, gráficos ni interfaz.",
+        "section": "colors"
+      },
+      {
+        "name": "The Un Eje Rule",
+        "body": "No se agrega otra familia. La jerarquía se arma con peso y ancho de Archivo: expandido para rótulos, condensado para números.",
+        "section": "typography"
+      },
+      {
+        "name": "The Cifra Tabular Rule",
+        "body": "Todo número va en cifras tabulares (`font-variant-numeric: tabular-nums` en el cuerpo), para que tanteador, porcentajes y semilla no bailen.",
+        "section": "typography"
+      },
+      {
+        "name": "The Sombra de Tubo Rule",
+        "body": "Toda sombra cae recta hacia abajo con desenfoque y dispersión negativa. Nunca una sombra dura desplazada ni un resplandor de color.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do nombrar cada superficie por su material (pared, fórmica, chapa, papel, naipe) y usar solo los colores de ese material.",
+      "Do reservar el bordó chapa para tanteador, dorsos, cantos, acciones principales, foco y error.",
+      "Do escribir los cantos con el texto que manda la API, entre comillas angulares («»).",
+      "Do usar Archivo con el eje de ancho: 125% en rótulos pintados, 75 a 80% en números, normal en texto.",
+      "Do mantener 44px de alto mínimo en cantos y 48px en acciones principales.",
+      "Do dibujar palos, palitos y remaches en SVG o CSS propio.",
+      "Do apagar viaje, placa y globo con `prefers-reduced-motion`."
+    ],
+    "donts": [
+      "Don't usar paño verde de casino ni texturas de fieltro para la mesa: la mesa es fórmica celeste.",
+      "Don't armar la botonera como un formulario de botones grises; cada canto es una chapita, y el único canto sin relleno es el silencioso (\"Me voy al mazo\").",
+      "Don't usar los colores de palo fuera del naipe.",
+      "Don't agregar una segunda familia tipográfica.",
+      "Don't usar sombras duras desplazadas ni resplandores de color; la luz es la del tubo, de arriba.",
+      "Don't usar imágenes de terceros para cartas o palos."
+    ]
+  }
+}

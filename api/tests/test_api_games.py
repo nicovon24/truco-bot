@@ -104,8 +104,16 @@ def test_bot_events_include_policy(client: TestClient) -> None:
         ]
         for ev in bot_actions:
             assert ev["policy"] is not None
-            assert sum(ev["policy"].values()) == pytest.approx(1.0)
-            assert ev["action_name"] in ev["policy"]
+            assert sum(e["probability"] for e in ev["policy"]) == pytest.approx(1.0)
+            assert ev["action_name"] in {e["name"] for e in ev["policy"]}
+            probs = [e["probability"] for e in ev["policy"]]
+            assert probs == sorted(probs, reverse=True)
+            # Las cartas del bot nunca se nombran en la policy.
+            assert all(
+                e["label"].startswith("Carta ")
+                for e in ev["policy"]
+                if e["name"].startswith("PLAY")
+            )
         human = [e for e in body["new_events"] if e["actor"] == "human"]
         assert human[0]["action"] == action
         assert human[0]["policy"] is None

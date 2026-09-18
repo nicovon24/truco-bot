@@ -10,14 +10,23 @@ from app.schemas.games import (
     GameOut,
     LegalActionOut,
     ObservationOut,
+    PolicyEntryOut,
     Seat,
     SlotOut,
     Status,
     SuitName,
     TrucoOut,
 )
-from app.services.game_service import BOT, HUMAN, GameEvent, GameRecord, action_label
+from app.services.game_service import (
+    BOT,
+    CANTO_LABELS,
+    HUMAN,
+    GameEvent,
+    GameRecord,
+    action_label,
+)
 from truco_engine import Action, Phase, legal_actions, observe
+from truco_engine.actions import PLAY_ACTIONS
 from truco_engine.cards import Suit, card_number, card_str, card_suit
 from truco_engine.state import NO_CARD, PARDA
 
@@ -58,10 +67,33 @@ def event_out(ev: GameEvent) -> EventOut:
         type=ev.type,
         action=None if ev.action is None else int(ev.action),
         action_name=None if ev.action is None else ev.action.name,
+        label=_event_label(ev),
         card=card_out(ev.card),
-        policy=None if ev.policy is None else {a.name: p for a, p in sorted(ev.policy.items())},
+        policy=None if ev.policy is None else _policy_out(ev.policy),
         detail=ev.detail,
     )
+
+
+def _policy_label(action: Action) -> str:
+    if action in PLAY_ACTIONS:
+        return f"Carta {int(action) + 1} del bot"
+    return CANTO_LABELS[action]
+
+
+def _policy_out(policy: dict[Action, float]) -> list[PolicyEntryOut]:
+    entries = sorted(policy.items(), key=lambda item: (-item[1], int(item[0])))
+    return [
+        PolicyEntryOut(action=int(a), name=a.name, label=_policy_label(a), probability=p)
+        for a, p in entries
+    ]
+
+
+def _event_label(ev: GameEvent) -> str | None:
+    if ev.action is None:
+        return None
+    if ev.card is not None:
+        return f"Tira el {card_str(ev.card)}"
+    return CANTO_LABELS[ev.action]
 
 
 def game_out(record: GameRecord) -> GameOut:

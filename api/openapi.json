@@ -546,6 +546,18 @@
             ],
             "title": "Action Name"
           },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label",
+            "description": "Texto del canto o la jugada."
+          },
           "card": {
             "anyOf": [
               {
@@ -559,17 +571,17 @@
           "policy": {
             "anyOf": [
               {
-                "additionalProperties": {
-                  "type": "number"
+                "items": {
+                  "$ref": "#/components/schemas/PolicyEntryOut"
                 },
-                "type": "object"
+                "type": "array"
               },
               {
                 "type": "null"
               }
             ],
             "title": "Policy",
-            "description": "Probabilidades por nombre de acción que usó el bot."
+            "description": "Probabilidades que usó el bot, de mayor a menor."
           },
           "detail": {
             "additionalProperties": true,
@@ -840,6 +852,35 @@
           "hand_points"
         ],
         "title": "ObservationOut"
+      },
+      "PolicyEntryOut": {
+        "properties": {
+          "action": {
+            "type": "integer",
+            "title": "Action"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label",
+            "description": "Texto de la acción. Las cartas del bot se nombran por slot (no se revelan)."
+          },
+          "probability": {
+            "type": "number",
+            "title": "Probability"
+          }
+        },
+        "type": "object",
+        "required": [
+          "action",
+          "name",
+          "label",
+          "probability"
+        ],
+        "title": "PolicyEntryOut"
       },
       "SlotOut": {
         "properties": {

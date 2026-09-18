@@ -209,14 +209,17 @@ export interface components {
             action?: number | null;
             /** Action Name */
             action_name?: string | null;
+            /**
+             * Label
+             * @description Texto del canto o la jugada.
+             */
+            label?: string | null;
             card?: components["schemas"]["CardOut"] | null;
             /**
              * Policy
-             * @description Probabilidades por nombre de acción que usó el bot.
+             * @description Probabilidades que usó el bot, de mayor a menor.
              */
-            policy?: {
-                [key: string]: number;
-            } | null;
+            policy?: components["schemas"]["PolicyEntryOut"][] | null;
             /** Detail */
             detail?: {
                 [key: string]: unknown;
@@ -304,6 +307,20 @@ export interface components {
             hand_points: {
                 [key: string]: number;
             };
+        };
+        /** PolicyEntryOut */
+        PolicyEntryOut: {
+            /** Action */
+            action: number;
+            /** Name */
+            name: string;
+            /**
+             * Label
+             * @description Texto de la acción. Las cartas del bot se nombran por slot (no se revelan).
+             */
+            label: string;
+            /** Probability */
+            probability: number;
         };
         /** SlotOut */
         SlotOut: {

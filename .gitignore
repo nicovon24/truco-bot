@@ -44,3 +44,8 @@ Thumbs.db
 .agents/skills/*/scripts/bin/
 .model_cache/
 *.log
+
+# Impeccable: capturas y estado de sesión (locales)
+web/.impeccable/review/
+web/.impeccable/questions/
+web/.impeccable/config.local.json

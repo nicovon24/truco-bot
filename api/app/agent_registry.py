@@ -21,6 +21,9 @@ from pydantic import BaseModel, ValidationError
 
 from truco_engine import CONTRACT_VERSION, ENCODE_SIZE, NUM_ACTIONS
 from truco_engine.agents import Agent, HeuristicAgent, RandomAgent
+from truco_engine.agents.neural_agent import NeuralAgent
+from truco_engine.agents.tabular_agent import TabularAgent
+from truco_engine.tabular import TabularPolicy
 
 logger = logging.getLogger(__name__)
 
@@ -111,10 +114,25 @@ def load_metadata(path: Path) -> ModelMetadata:
 
 
 def _model_factory(meta: ModelMetadata, artifact: Path) -> Callable[[], Agent]:
-    # TabularAgent (fase 7) y NeuralAgent (fase 9) todavía no existen.
-    raise RegistryError(
-        f"modelo {meta.name}: el tipo '{meta.type}' todavía no está soportado por la API"
-    )
+    """Valida que el artefacto cargue al arrancar y devuelve una fábrica por partida."""
+    try:
+        if meta.type == "tabular":
+            policy, table_meta = TabularPolicy.load(artifact)
+            variant = str((table_meta.get("game") or {}).get("variant", "sin_envido"))
+
+            def tabular() -> Agent:
+                return TabularAgent(policy, variant, name=meta.name)
+
+            tabular()
+            return tabular
+        neural = NeuralAgent.load(artifact, name=meta.name)
+
+        def neural_factory() -> Agent:
+            return NeuralAgent(neural.session, name=meta.name)
+
+        return neural_factory
+    except (OSError, ValueError, TypeError, KeyError, ImportError) as exc:
+        raise RegistryError(f"modelo {meta.name}: no se pudo cargar el artefacto: {exc}") from exc
 
 
 class AgentRegistry:

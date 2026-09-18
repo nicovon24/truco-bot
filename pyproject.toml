@@ -16,7 +16,7 @@ dev = [
     "types-pyyaml>=6.0",
     "truco-engine",
     "truco-api",
-    "truco-train",
+    "truco-train[ml]",
 ]
 
 [tool.uv]

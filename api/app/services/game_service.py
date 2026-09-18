@@ -80,18 +80,21 @@ class GameRecord:
 def action_label(action: Action, state: GameState, seat: int) -> str:
     if action in PLAY_ACTIONS:
         return f"Tirar {card_str(state.hand.hands[seat][int(action)])}"
-    return {
-        Action.ENVIDO: "Envido",
-        Action.REAL_ENVIDO: "Real envido",
-        Action.FALTA_ENVIDO: "Falta envido",
-        Action.TRUCO: "Truco",
-        Action.RETRUCO: "Quiero retruco",
-        Action.VALE_CUATRO: "Quiero vale cuatro",
-        Action.QUIERO: "Quiero",
-        Action.NO_QUIERO: "No quiero",
-        Action.FOLD: "Irse al mazo",
-        Action.FLOR_RESERVED: "Flor",
-    }[action]
+    return CANTO_LABELS[action]
+
+
+CANTO_LABELS: dict[Action, str] = {
+    Action.ENVIDO: "Envido",
+    Action.REAL_ENVIDO: "Real envido",
+    Action.FALTA_ENVIDO: "Falta envido",
+    Action.TRUCO: "Truco",
+    Action.RETRUCO: "Quiero retruco",
+    Action.VALE_CUATRO: "Quiero vale cuatro",
+    Action.QUIERO: "Quiero",
+    Action.NO_QUIERO: "No quiero",
+    Action.FOLD: "Me voy al mazo",
+    Action.FLOR_RESERVED: "Flor",
+}
 
 
 class GameService:

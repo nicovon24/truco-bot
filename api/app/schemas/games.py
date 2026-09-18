@@ -87,6 +87,15 @@ class LegalActionOut(BaseModel):
     label: str
 
 
+class PolicyEntryOut(BaseModel):
+    action: int
+    name: str
+    label: str = Field(
+        description="Texto de la acción. Las cartas del bot se nombran por slot (no se revelan)."
+    )
+    probability: float
+
+
 class EventOut(BaseModel):
     seq: int
     hand_number: int
@@ -94,9 +103,10 @@ class EventOut(BaseModel):
     type: str
     action: int | None = None
     action_name: str | None = None
+    label: str | None = Field(default=None, description="Texto del canto o la jugada.")
     card: CardOut | None = None
-    policy: dict[str, float] | None = Field(
-        default=None, description="Probabilidades por nombre de acción que usó el bot."
+    policy: list[PolicyEntryOut] | None = Field(
+        default=None, description="Probabilidades que usó el bot, de mayor a menor."
     )
     detail: dict[str, Any] = Field(default_factory=dict)
 
