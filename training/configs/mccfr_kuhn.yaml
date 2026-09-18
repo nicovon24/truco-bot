@@ -1,0 +1,13 @@
+# Fase 6: validación de MCCFR en Kuhn poker (valor -1/18, explotabilidad -> 0).
+name: mccfr_kuhn
+algorithm: mccfr
+seed: 20260918
+iterations: 100000
+eval_every: 10000
+checkpoint_every: 50000
+game:
+  name: kuhn
+mccfr:
+  regret_matching_plus: true
+  linear_averaging: true
+output_dir: runs/mccfr_kuhn

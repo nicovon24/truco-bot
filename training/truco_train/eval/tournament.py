@@ -10,7 +10,6 @@ from __future__ import annotations
 import json
 import math
 import platform
-import subprocess
 import time
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import asdict, dataclass, field
@@ -24,6 +23,7 @@ from typing import Any
 from truco_engine import CONTRACT_VERSION, RulesConfig
 from truco_engine.agents import Agent, HeuristicAgent, HeuristicConfig, RandomAgent
 from truco_engine.game import play_game
+from truco_train.provenance import git_commit
 
 AgentFactory = Callable[[], Agent]
 
@@ -69,6 +69,10 @@ def build_agent(spec: AgentSpec) -> Agent:
         return RandomAgent()
     if spec.type == "heuristic":
         return HeuristicAgent(HeuristicConfig(**spec.params))
+    if spec.type == "tabular":
+        from truco_engine.agents.tabular_agent import TabularAgent
+
+        return TabularAgent.load(Path(spec.params["path"]), name=spec.id)
     raise ValueError(f"tipo de agente desconocido: {spec.type}")
 
 
@@ -167,22 +171,6 @@ def run_tournament(config: TournamentConfig) -> list[MatchupResult]:
     return results
 
 
-def _git_commit() -> str:
-    try:
-        out = subprocess.run(
-            ["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True, check=True
-        )
-        dirty = subprocess.run(
-            ["git", "status", "--porcelain", "--untracked-files=no"],
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-    except (OSError, subprocess.CalledProcessError):
-        return "unknown"
-    return out.stdout.strip() + ("-dirty" if dirty.stdout.strip() else "")
-
-
 def render_markdown(config: TournamentConfig, results: Sequence[MatchupResult]) -> str:
     pct = int(config.confidence * 100)
     lines = [
@@ -218,7 +206,7 @@ def write_report(
     payload = {
         "name": config.name,
         "config_path": config_path,
-        "commit": _git_commit(),
+        "commit": git_commit(),
         "contract_version": CONTRACT_VERSION,
         "date": datetime.now(UTC).isoformat(timespec="seconds"),
         "seed": config.seed,

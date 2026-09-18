@@ -3,7 +3,10 @@ name = "truco-engine"
 version = "0.1.0"
 description = "Motor de reglas de Truco argentino 1 vs 1."
 requires-python = ">=3.12,<3.13"
-dependencies = ["numpy>=1.26"]
+dependencies = [
+    "msgpack>=1.2.2",
+    "numpy>=1.26",
+]
 
 [project.optional-dependencies]
 neural = ["onnxruntime>=1.18"]

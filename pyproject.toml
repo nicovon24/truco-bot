@@ -37,7 +37,7 @@ extend-exclude = ["web", ".claude", ".agents", ".codex"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "UP", "B", "SIM", "RUF", "C4", "PT", "PL"]
-ignore = ["PLR0917", "PLR0911", "PLR0912", "PLR0913", "PLR0915", "PLR2004", "RUF001", "RUF002", "RUF003"]
+ignore = ["PLC0415", "PLR0917", "PLR0911", "PLR0912", "PLR0913", "PLR0915", "PLR2004", "RUF001", "RUF002", "RUF003"]
 
 [tool.ruff.lint.per-file-ignores]
 # Abreviaturas de palos (E, B, O, C) en tests.
@@ -55,7 +55,7 @@ mypy_path = ["engine", "api", "training"]
 warn_unreachable = true
 
 [[tool.mypy.overrides]]
-module = ["onnxruntime.*"]
+module = ["onnxruntime.*", "msgpack.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
