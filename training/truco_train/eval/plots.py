@@ -12,23 +12,34 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-CURVE_KEYS = ("payoff_vs_heuristic", "payoff_vs_heuristic_actual")
+CURVE_KEYS = ("payoff_vs_heuristic", "payoff_vs_heuristic_actual", "exploitability")
+Y_LABELS = {
+    "payoff_vs_heuristic": "payoff por mano vs heurístico",
+    "payoff_vs_heuristic_actual": "payoff por mano vs heurístico",
+    "exploitability": "explotabilidad exacta",
+}
 X_KEYS = ("iteration", "timesteps")
 
 
 def curve_points(metrics: Sequence[dict[str, Any]]) -> tuple[str, list[float], list[float]]:
+    x_name, _, xs, ys = _curve(metrics)
+    return x_name, xs, ys
+
+
+def _curve(metrics: Sequence[dict[str, Any]]) -> tuple[str, str, list[float], list[float]]:
     xs: list[float] = []
     ys: list[float] = []
     x_name = "iteration"
+    y_name = CURVE_KEYS[0]
     for row in metrics:
-        y = next((row[k] for k in CURVE_KEYS if k in row), None)
+        y_key = next((k for k in CURVE_KEYS if k in row), None)
         x_key = next((k for k in X_KEYS if k in row), None)
-        if y is None or x_key is None:
+        if y_key is None or x_key is None:
             continue
-        x_name = x_key
+        x_name, y_name = x_key, y_key
         xs.append(float(row[x_key]))
-        ys.append(float(y))
-    return x_name, xs, ys
+        ys.append(float(row[y_key]))
+    return x_name, y_name, xs, ys
 
 
 def plot_curves(run_dirs: Sequence[Path], out: Path) -> Path:
@@ -36,12 +47,12 @@ def plot_curves(run_dirs: Sequence[Path], out: Path) -> Path:
     runs = [(d, json.loads((d / "metrics.json").read_text(encoding="utf-8"))) for d in run_dirs]
     fig, axes = plt.subplots(1, len(runs), figsize=(5 * len(runs), 3.6), squeeze=False)
     for ax, (run_dir, data) in zip(axes[0], runs, strict=True):
-        x_name, xs, ys = curve_points(data.get("metrics", []))
+        x_name, y_name, xs, ys = _curve(data.get("metrics", []))
         ax.plot(xs, ys, marker="o", color="#1e4d3b")
         ax.axhline(0.0, color="#7b1e2c", linewidth=1, linestyle="--")
         ax.set_title(data.get("name") or run_dir.name)
         ax.set_xlabel("iteración" if x_name == "iteration" else "timesteps")
-        ax.set_ylabel("payoff por mano vs heurístico")
+        ax.set_ylabel(Y_LABELS[y_name])
         ax.grid(alpha=0.3)
     fig.tight_layout()
     out.parent.mkdir(parents=True, exist_ok=True)
