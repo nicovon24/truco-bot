@@ -16,13 +16,22 @@ Próximamente.
 
 ## Desarrollo local
 
-El scaffolding se incorpora en la fase 1. Una vez disponible:
-
 ```bash
+# Todo con Docker: API en http://localhost:8000 y web en http://localhost:3000
 docker compose up --build
-```
 
-La API y la web se publicarán en los puertos definidos por `docker-compose.yml`.
+# Sin Docker
+uv sync --all-groups && pnpm install
+uv run uvicorn app.main:app --app-dir api --reload   # API
+pnpm dev                                             # web
+
+# Validaciones
+uv run pytest && uv run ruff check . && uv run mypy engine api training
+pnpm lint && pnpm typecheck && pnpm test
+
+# Regenerar el contrato OpenAPI y los tipos del front
+uv run python -m app.export_openapi api/openapi.json && pnpm gen:api
+```
 
 ## Estructura
 

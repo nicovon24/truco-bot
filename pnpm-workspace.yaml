@@ -1,0 +1,6 @@
+packages:
+  - web
+
+# unrs-resolver trae binarios precompilados; no necesita su script de build.
+ignoredBuiltDependencies:
+  - unrs-resolver

@@ -25,6 +25,10 @@ pnpm typecheck
 # Levantar API y web
 docker compose up --build
 
+# Regenerar OpenAPI y tipos del front (CI verifica que estén al día)
+uv run python -m app.export_openapi api/openapi.json
+pnpm gen:api
+
 # Torneo básico (fase 3)
 uv run truco-train eval tournament --config training/configs/tournament_basic.yaml
 

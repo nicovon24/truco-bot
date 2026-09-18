@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv python install 3.12
+      - run: uv sync --all-groups --frozen
+      - run: uv run ruff format --check .
+      - run: uv run ruff check .
+      - run: uv run mypy engine api training
+      - run: uv run pytest
+      - name: OpenAPI actualizado
+        run: |
+          uv run python -m app.export_openapi api/openapi.json
+          git diff --exit-code api/openapi.json
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Tipos de la API actualizados
+        run: |
+          pnpm gen:api
+          git diff --exit-code web/src/lib/api-types.ts
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
