@@ -6,7 +6,7 @@ La comparación principal es un torneo todos contra todos en partidas completas 
 
 Se reportan partidas y pares espejados, victorias, derrotas, win rate, diferencia media de puntos e intervalo de confianza. Los empates, si el límite operativo permite que existan, se informan por separado y no se descartan silenciosamente.
 
-> ⚠️ A CONFIRMAR: cantidad mínima de partidas o pares espejados por cruce, nivel del intervalo de confianza, método estadístico y eventual límite máximo de manos por partida.
+> Implementación actual (fase 3): intervalo de Wilson al 95% sobre partidas, aproximado porque los pares espejados no son independientes; límite de seguridad de 1.000 manos por partida (`play_game(max_hands=...)`). ⚠️ A CONFIRMAR en la fase 8: cantidad mínima de pares por cruce y método estadístico definitivo.
 
 Para comparar iteraciones de entrenamiento se grafica el win rate contra una versión fija del agente heurístico, usando el mismo conjunto de semillas y repartos espejados en todos los puntos de la curva.
 

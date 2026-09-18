@@ -1,0 +1,946 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Truco API",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agents": {
+      "get": {
+        "tags": [
+          "agents"
+        ],
+        "summary": "List Agents",
+        "operationId": "list_agents_agents_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AgentOut"
+                  },
+                  "type": "array",
+                  "title": "Response List Agents Agents Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/games": {
+      "post": {
+        "tags": [
+          "games"
+        ],
+        "summary": "Create Game",
+        "operationId": "create_game_games_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGameIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/games/{game_id}": {
+      "get": {
+        "tags": [
+          "games"
+        ],
+        "summary": "Get Game",
+        "operationId": "get_game_games__game_id__get",
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Game Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/games/{game_id}/actions": {
+      "post": {
+        "tags": [
+          "games"
+        ],
+        "summary": "Play Action",
+        "operationId": "play_action_games__game_id__actions_post",
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Game Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActionIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActionResultOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/games/{game_id}/next-hand": {
+      "post": {
+        "tags": [
+          "games"
+        ],
+        "summary": "Deal Next Hand",
+        "operationId": "deal_next_hand_games__game_id__next_hand_post",
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Game Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActionResultOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ActionIn": {
+        "properties": {
+          "action": {
+            "type": "integer",
+            "maximum": 12.0,
+            "minimum": 0.0,
+            "title": "Action",
+            "description": "Índice del espacio de acciones (contrato v1)."
+          }
+        },
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "title": "ActionIn"
+      },
+      "ActionResultOut": {
+        "properties": {
+          "game": {
+            "$ref": "#/components/schemas/GameOut"
+          },
+          "new_events": {
+            "items": {
+              "$ref": "#/components/schemas/EventOut"
+            },
+            "type": "array",
+            "title": "New Events"
+          }
+        },
+        "type": "object",
+        "required": [
+          "game",
+          "new_events"
+        ],
+        "title": "ActionResultOut"
+      },
+      "AgentOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "model_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "type",
+          "description",
+          "model_version"
+        ],
+        "title": "AgentOut"
+      },
+      "BazaOut": {
+        "properties": {
+          "human": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CardOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "bot": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CardOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "result": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "human",
+                  "bot",
+                  "parda"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result"
+          }
+        },
+        "type": "object",
+        "required": [
+          "human",
+          "bot",
+          "result"
+        ],
+        "title": "BazaOut"
+      },
+      "CardOut": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id",
+            "description": "Índice canónico 0..39."
+          },
+          "number": {
+            "type": "integer",
+            "title": "Number"
+          },
+          "suit": {
+            "type": "string",
+            "enum": [
+              "espada",
+              "basto",
+              "oro",
+              "copa"
+            ],
+            "title": "Suit"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "number",
+          "suit",
+          "label"
+        ],
+        "title": "CardOut"
+      },
+      "CreateGameIn": {
+        "properties": {
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "seed": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 9.223372036854776e+18,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "agent_id"
+        ],
+        "title": "CreateGameIn"
+      },
+      "EnvidoOut": {
+        "properties": {
+          "calls": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Calls"
+          },
+          "pending": {
+            "type": "boolean",
+            "title": "Pending"
+          },
+          "caller": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "human",
+                  "bot"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Caller"
+          },
+          "resolved": {
+            "type": "boolean",
+            "title": "Resolved"
+          },
+          "accepted": {
+            "type": "boolean",
+            "title": "Accepted"
+          },
+          "human_value": {
+            "type": "integer",
+            "title": "Human Value"
+          },
+          "bot_value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bot Value",
+            "description": "Solo si el envido fue querido."
+          },
+          "winner": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "human",
+                  "bot"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Winner"
+          },
+          "points": {
+            "type": "integer",
+            "title": "Points"
+          }
+        },
+        "type": "object",
+        "required": [
+          "calls",
+          "pending",
+          "caller",
+          "resolved",
+          "accepted",
+          "human_value",
+          "bot_value",
+          "winner",
+          "points"
+        ],
+        "title": "EnvidoOut"
+      },
+      "EventOut": {
+        "properties": {
+          "seq": {
+            "type": "integer",
+            "title": "Seq"
+          },
+          "hand_number": {
+            "type": "integer",
+            "title": "Hand Number"
+          },
+          "actor": {
+            "type": "string",
+            "enum": [
+              "human",
+              "bot",
+              "system"
+            ],
+            "title": "Actor"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "action": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Action"
+          },
+          "action_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Action Name"
+          },
+          "card": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CardOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "policy": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Policy",
+            "description": "Probabilidades por nombre de acción que usó el bot."
+          },
+          "detail": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "seq",
+          "hand_number",
+          "actor",
+          "type"
+        ],
+        "title": "EventOut"
+      },
+      "GameOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "playing",
+              "hand_over",
+              "game_over"
+            ],
+            "title": "Status"
+          },
+          "scores": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "propertyNames": {
+              "enum": [
+                "human",
+                "bot"
+              ]
+            },
+            "type": "object",
+            "title": "Scores"
+          },
+          "target_score": {
+            "type": "integer",
+            "title": "Target Score"
+          },
+          "winner": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "human",
+                  "bot"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Winner"
+          },
+          "observation": {
+            "$ref": "#/components/schemas/ObservationOut"
+          },
+          "legal_actions": {
+            "items": {
+              "$ref": "#/components/schemas/LegalActionOut"
+            },
+            "type": "array",
+            "title": "Legal Actions"
+          },
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/EventOut"
+            },
+            "type": "array",
+            "title": "Events"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "agent_id",
+          "seed",
+          "status",
+          "scores",
+          "target_score",
+          "winner",
+          "observation",
+          "legal_actions",
+          "events"
+        ],
+        "title": "GameOut"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthOut": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ok",
+            "title": "Status"
+          },
+          "contract_version": {
+            "type": "string",
+            "title": "Contract Version"
+          },
+          "agents": {
+            "type": "integer",
+            "title": "Agents"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "contract_version",
+          "agents"
+        ],
+        "title": "HealthOut"
+      },
+      "LegalActionOut": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "label"
+        ],
+        "title": "LegalActionOut"
+      },
+      "ObservationOut": {
+        "properties": {
+          "hand_number": {
+            "type": "integer",
+            "title": "Hand Number"
+          },
+          "mano": {
+            "type": "string",
+            "enum": [
+              "human",
+              "bot"
+            ],
+            "title": "Mano"
+          },
+          "turn": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "human",
+                  "bot"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Turn"
+          },
+          "baza": {
+            "type": "integer",
+            "title": "Baza"
+          },
+          "my_cards": {
+            "items": {
+              "$ref": "#/components/schemas/SlotOut"
+            },
+            "type": "array",
+            "title": "My Cards"
+          },
+          "bot_cards_in_hand": {
+            "type": "integer",
+            "title": "Bot Cards In Hand"
+          },
+          "bazas": {
+            "items": {
+              "$ref": "#/components/schemas/BazaOut"
+            },
+            "type": "array",
+            "title": "Bazas"
+          },
+          "truco": {
+            "$ref": "#/components/schemas/TrucoOut"
+          },
+          "envido": {
+            "$ref": "#/components/schemas/EnvidoOut"
+          },
+          "hand_finished": {
+            "type": "boolean",
+            "title": "Hand Finished"
+          },
+          "hand_winner": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "human",
+                  "bot"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hand Winner"
+          },
+          "hand_points": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "propertyNames": {
+              "enum": [
+                "human",
+                "bot"
+              ]
+            },
+            "type": "object",
+            "title": "Hand Points"
+          }
+        },
+        "type": "object",
+        "required": [
+          "hand_number",
+          "mano",
+          "turn",
+          "baza",
+          "my_cards",
+          "bot_cards_in_hand",
+          "bazas",
+          "truco",
+          "envido",
+          "hand_finished",
+          "hand_winner",
+          "hand_points"
+        ],
+        "title": "ObservationOut"
+      },
+      "SlotOut": {
+        "properties": {
+          "slot": {
+            "type": "integer",
+            "title": "Slot"
+          },
+          "card": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CardOut"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "None si la carta ya se jugó."
+          }
+        },
+        "type": "object",
+        "required": [
+          "slot",
+          "card"
+        ],
+        "title": "SlotOut"
+      },
+      "TrucoOut": {
+        "properties": {
+          "level": {
+            "type": "integer",
+            "title": "Level",
+            "description": "Valor aceptado de la mano: 1 a 4."
+          },
+          "pending": {
+            "type": "boolean",
+            "title": "Pending"
+          },
+          "last_caller": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "human",
+                  "bot"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Caller"
+          }
+        },
+        "type": "object",
+        "required": [
+          "level",
+          "pending",
+          "last_caller"
+        ],
+        "title": "TrucoOut"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

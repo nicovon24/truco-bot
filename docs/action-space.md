@@ -1,68 +1,74 @@
 # Contrato de acciones y observaciones
 
-El espacio de acciones, `info_key()` y `encode()` forman el contrato entre motor, entrenamiento, modelos y API. Un artefacto solo puede cargarse si su metadata declara una versión compatible.
+El espacio de acciones, `info_key()` y `encode()` forman el contrato entre motor, entrenamiento, modelos y API. Un artefacto solo puede cargarse si su metadata declara una versión compatible (`contract.version`, `num_actions`, `encode_size`; lo valida `api/app/agent_registry.py`).
 
-> ⚠️ A CONFIRMAR: identificador de la primera versión del contrato. Hasta resolverlo, no existe una versión publicable.
+**Versión vigente: `1`** (`truco_engine.actions.CONTRACT_VERSION`). Ver [ADR 0012](decisions/0012-contrato-v1.md).
+
+## Orden canónico de cartas
+
+Índice `palo * 10 + posición del número`, con palos `espada=0, basto=1, oro=2, copa=3` y números `1, 2, 3, 4, 5, 6, 7, 10, 11, 12`. Ejemplos: 1 de espada = 0, 12 de espada = 9, 1 de basto = 10, 12 de copa = 39.
 
 ## Espacio fijo de acciones
 
-| Índice | Identificador propuesto | Significado | Nota |
-|---:|---|---|---|
-| 0 | `PLAY_CARD_0` | Tirar la carta del slot 0 | Slot de menor jerarquía entre las cartas originales |
-| 1 | `PLAY_CARD_1` | Tirar la carta del slot 1 | Slot intermedio entre las cartas originales |
-| 2 | `PLAY_CARD_2` | Tirar la carta del slot 2 | Slot de mayor jerarquía entre las cartas originales |
-| 3 | `ENVIDO` | Cantar Envido | Solo si las reglas lo permiten |
-| 4 | `REAL_ENVIDO` | Cantar Real Envido | Solo si las reglas lo permiten |
-| 5 | `FALTA_ENVIDO` | Cantar Falta Envido | Solo si las reglas lo permiten |
-| 6 | `TRUCO` | Cantar Truco | Primer nivel |
-| 7 | `RETRUCO` | Cantar Retruco | Segundo nivel |
-| 8 | `VALE_CUATRO` | Cantar Vale Cuatro | Tercer nivel |
-| 9 | `QUIERO` | Aceptar el canto pendiente | Resuelve o acepta según el canto |
-| 10 | `NO_QUIERO` | Rechazar el canto pendiente | Otorga el puntaje correspondiente |
-| 11 | `FOLD` | Irse al mazo | Termina la mano |
-| 12 | `FLOR_RESERVED` | Reservada para Flor | Siempre ilegal mientras Flor no esté implementada |
+| Índice | Identificador | Significado |
+|---:|---|---|
+| 0 | `PLAY_CARD_0` | Tirar la carta del slot 0 (menor jerarquía) |
+| 1 | `PLAY_CARD_1` | Tirar la carta del slot 1 |
+| 2 | `PLAY_CARD_2` | Tirar la carta del slot 2 (mayor jerarquía) |
+| 3 | `ENVIDO` | Cantar Envido |
+| 4 | `REAL_ENVIDO` | Cantar Real Envido |
+| 5 | `FALTA_ENVIDO` | Cantar Falta Envido |
+| 6 | `TRUCO` | Cantar Truco |
+| 7 | `RETRUCO` | Cantar Retruco |
+| 8 | `VALE_CUATRO` | Cantar Vale Cuatro |
+| 9 | `QUIERO` | Aceptar el canto pendiente (el envido tiene prioridad) |
+| 10 | `NO_QUIERO` | Rechazar el canto pendiente |
+| 11 | `FOLD` | Irse al mazo |
+| 12 | `FLOR_RESERVED` | Reservada para Flor; siempre ilegal |
 
-La interpretación propuesta es asignar los tres slots una vez al repartir, ordenando las cartas de menor a mayor jerarquía de Truco. Jugar una carta no renumeraría los slots y una acción sobre un slot ya usado sería ilegal.
-
-> ⚠️ A CONFIRMAR: confirmar que los slots permanecen estables durante toda la mano, en lugar de compactar las cartas restantes después de cada jugada.
-
-> ⚠️ A CONFIRMAR: criterio de desempate estable para ordenar dos cartas del mismo escalón en slots distintos. Debe basarse en un orden canónico de las 40 cartas.
+Slots: se asignan una vez al repartir, ordenando de menor a mayor escalón de truco; los empates de escalón se desempatan por índice canónico (menor primero). Los slots son **estables** durante toda la mano: jugar una carta no renumera las demás y un slot usado es ilegal.
 
 ## `info_key(obs)`
 
-La clave identifica un information set sin incluir cartas ocultas ni el mazo. Sus componentes, en este orden lógico, son:
+Formato (un string, campos separados por `|`):
 
-1. escalones de Truco de las cartas propias restantes, ordenados;
-2. valor privado de envido propio mientras el envido no se haya resuelto;
-3. historial público compacto: cartas jugadas, cantos, respuestas, quién es mano, turno y marcador aplicable.
+```
+c=<escalones propios restantes, ascendentes, separados por .>
+|e=<mi envido privado, o - si el envido ya se resolvió>
+|m=<1 si soy mano, 0 si no>
+|s=<mis puntos>-<puntos rival>
+|v=<envido mío>-<envido rival si fue querido, o ->
+|h=<historial público separado por comas>
+```
 
-> ⚠️ A CONFIRMAR: serialización canónica exacta, separadores, representación de valores ausentes y esquema del historial público. Esto debe cerrarse antes de entrenar una política tabular porque cualquier cambio invalida sus claves.
+Cada evento del historial es `a` (observador) o `b` (rival) seguido del escalón de truco de la carta tirada, o de un código de canto: `E`, `R`, `F`, `T`, `RT`, `V`, `Q`, `N`, `M` (mazo).
+
+Ejemplo: `c=7.10.14|e=-|m=0|s=0-2|v=3-33|h=bE,aQ,b11`.
+
+Las cartas jugadas se abstraen a su escalón: el palo solo importa para el envido, que ya viaja como valor.
 
 ## `encode(obs)`
 
-El resultado será un `np.ndarray` unidimensional de `float32`, de tamaño fijo. El contenido mínimo exigido es el siguiente:
+`np.ndarray` float32 de tamaño fijo **317**, desde la perspectiva del observador ("yo" / "rival"). Todas las posiciones están en `[0, 1]`.
 
-| Orden | Bloque | Posiciones | Codificación requerida |
-|---:|---|---|---|
-| 1 | Cartas propias restantes | 40 posiciones | Multi-hot sobre un orden canónico de las 40 cartas |
-| 2 | Cartas jugadas | ⚠️ A CONFIRMAR | Carta por baza y jugador, sin exponer cartas futuras |
-| 3 | Estado de Truco | ⚠️ A CONFIRMAR | Autor del canto, nivel y condición pendiente |
-| 4 | Estado de Envido | ⚠️ A CONFIRMAR | Autor del canto, cadena/nivel y condición pendiente |
-| 5 | Valores de envido revelados | ⚠️ A CONFIRMAR | Ambos valores solo después de quedar públicos; ausentes antes |
-| 6 | Número de baza | ⚠️ A CONFIRMAR | Codificación fija de la baza actual |
-| 7 | Soy mano | ⚠️ A CONFIRMAR | Indicador binario desde la perspectiva del observador |
-| 8 | Marcador | ⚠️ A CONFIRMAR | Puntajes normalizados respecto del objetivo |
+| Offset | Largo | Bloque | Codificación |
+|---:|---:|---|---|
+| 0 | 40 | Mis cartas restantes | Multi-hot por índice canónico |
+| 40 | 240 | Cartas jugadas | 3 bazas × (yo, rival) × one-hot 40; ceros si falta |
+| 280 | 9 | Resultado de bazas | 3 bazas × (gané, perdí, parda); ceros si no terminó |
+| 289 | 7 | Truco | Nivel aceptado one-hot 4 (1..4), pendiente, último canto mío, último canto rival |
+| 296 | 10 | Envido | Cantidad de envidos one-hot 3 (0/1/2), hay real, hay falta, pendiente, cantó yo, cantó rival, resuelto, querido |
+| 306 | 3 | Envidos revelados | Revelado, mi valor/33, valor rival/33; ceros si no fue querido |
+| 309 | 3 | Baza actual | One-hot 0/1/2 |
+| 312 | 1 | Soy mano | 0/1 |
+| 313 | 1 | Me toca | 0/1 |
+| 314 | 2 | Marcador | Mis puntos/objetivo, rival/objetivo (tope 1) |
+| 316 | 1 | Mi envido privado | Valor/33; 0 si ya se resolvió |
 
-El índice final y el `shape` no pueden fijarse sin definir la representación de cada bloque.
-
-> ⚠️ A CONFIRMAR: orden canónico de palos y números para las primeras 40 posiciones.
-
-> ⚠️ A CONFIRMAR: elegir la codificación posición por posición de los bloques 2 a 8, incluido el tratamiento de slots vacíos, estados pendientes y valores de envido todavía privados.
-
-## Invariantes
+## Invariantes (con tests)
 
 - El vector siempre conserva el mismo `shape`, sin importar la fase de la mano.
-- Ninguna posición revela cartas del rival que todavía no se jugaron ni cartas del mazo.
+- Ni `encode` ni `info_key` cambian si se reemplazan las cartas no jugadas del rival (`engine/tests/test_observation.py`).
 - La perspectiva siempre corresponde al jugador que recibe la observación.
 - Las máscaras legales tienen 13 posiciones y usan los mismos índices de la tabla de acciones.
 - Cambiar índices, offsets, tamaño o semántica exige una nueva versión del contrato.

@@ -1,0 +1,63 @@
+[project]
+name = "truco-bot"
+version = "0.1.0"
+description = "Truco argentino 1 vs 1 contra bots entrenados por self-play."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "hypothesis>=6.100",
+    "httpx>=0.27",
+    "mypy>=1.11",
+    "pytest>=8.3",
+    "ruff>=0.6",
+    "types-pyyaml>=6.0",
+    "truco-engine",
+    "truco-api",
+    "truco-train",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.workspace]
+members = ["engine", "api", "training"]
+
+[tool.uv.sources]
+truco-engine = { workspace = true }
+truco-api = { workspace = true }
+truco-train = { workspace = true }
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["web"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "SIM", "RUF", "C4", "PT", "PL"]
+ignore = ["PLR0917", "PLR0911", "PLR0912", "PLR0913", "PLR0915", "PLR2004", "RUF001", "RUF002", "RUF003"]
+
+[tool.ruff.lint.per-file-ignores]
+# Abreviaturas de palos (E, B, O, C) en tests.
+"**/tests/**" = ["E741"]
+"engine/truco_engine/testing.py" = ["E741"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["truco_engine", "truco_train", "app"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+explicit_package_bases = true
+mypy_path = ["engine", "api", "training"]
+warn_unreachable = true
+
+[[tool.mypy.overrides]]
+module = ["onnxruntime.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["engine/tests", "api/tests", "training/tests"]
+addopts = ["--import-mode=importlib", "-ra"]

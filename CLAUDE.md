@@ -25,6 +25,12 @@ pnpm typecheck
 # Levantar API y web
 docker compose up --build
 
+# Torneo básico (fase 3)
+uv run truco-train eval tournament --config training/configs/tournament_basic.yaml
+
+# Benchmark del motor
+uv run python engine/benchmarks/random_vs_random.py --games 2000 --seed 0
+
 # Entrenar, evaluar y exportar; los subcomandos y configs se agregan en sus fases
 uv run truco-train train --config training/configs/<config>.yaml
 uv run truco-train eval tournament --config training/configs/<config>.yaml

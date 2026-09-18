@@ -1,16 +1,16 @@
 # Reglamento implementado por el motor
 
-Este documento es la referencia humana del reglamento. Solo afirma comportamientos definidos en `SPEC.md`. Cada punto pendiente está señalado y debe resolverse antes de implementar la parte afectada del motor.
+Este documento es la referencia humana del reglamento. Los puntos que estaban marcados "A CONFIRMAR" se cerraron el 2026-09-18 con el reglamento estándar propuesto y aceptado (ver [ADR 0010](decisions/0010-reglamento-confirmado.md)). La implementación está en `engine/truco_engine/rules.py` y `scoring.py`, y cada regla tiene tests en `engine/tests/`.
 
 ## Partida, mano y turnos
 
-La partida es de dos jugadores y se juega a 15 puntos por defecto. `RulesConfig` permitirá parametrizar el puntaje objetivo a 15 o 30. Cada mano reparte tres cartas por jugador y tiene hasta tres bazas. El rol de **mano** alterna al comenzar cada mano.
+La partida es de dos jugadores y se juega a 15 puntos por defecto. `RulesConfig` permite 15 o 30. Cada mano reparte tres cartas por jugador y tiene hasta tres bazas. El rol de **mano** alterna al comenzar cada mano; el primer mano de la partida se sortea con el `random.Random` de la partida.
 
-El ganador de una baza abre la siguiente. Si la baza termina parda, abre el mano.
+El ganador de una baza abre la siguiente. Si la baza termina parda, abre el **mano original de esa mano**.
 
-> ⚠️ A CONFIRMAR: si “abre el mano” siempre significa el mano original de esa mano o el jugador que abrió la baza que terminó parda.
+La partida termina en cuanto un jugador alcanza el objetivo, aunque sea en medio de una mano (por ejemplo, al cobrar un envido).
 
-La flor queda representada por un flag de configuración y una acción reservada, pero no se implementa: la acción siempre es ilegal.
+La flor queda representada por un flag de configuración y una acción reservada, pero no se implementa: la acción siempre es ilegal y `RulesConfig(flor=True)` lanza `NotImplementedError`.
 
 ## Mazo y jerarquía de Truco
 
@@ -33,11 +33,11 @@ Se usa el mazo español de 40 cartas, sin 8 ni 9. Las cartas de un mismo escaló
 | 13 | todos los 5 |
 | 14, menor | todos los 4 |
 
+En el código el escalón se guarda invertido (`TRUCO_RANK`: 14 = 1 de espada, 1 = los 4).
+
 ## Bazas y pardas
 
 Una carta gana una baza cuando pertenece a un escalón más alto que la carta rival. Si ambas cartas están en el mismo escalón, la baza es parda.
-
-Casos definidos:
 
 | Baza 1 | Baza 2 | Baza 3 | Resultado |
 |---|---|---|---|
@@ -46,18 +46,12 @@ Casos definidos:
 | Parda | Parda | Parda | Gana el mano |
 | A gana | Parda | No se juega | A gana la mano |
 | A gana | A gana | No se juega | A gana la mano |
-
-Ejemplo de primera parda: el mano juega un 5 de copa y el rival un 5 de oro. En la segunda baza el rival juega un 6 y el mano un 4. El rival gana la segunda baza y, con ella, la mano.
-
-Ejemplo de segunda parda: el mano gana la primera baza con un 2 contra un 12. En la segunda ambos juegan un 6. La segunda es parda y la mano queda para quien ganó la primera.
-
-Ejemplo de tres pardas: las tres parejas de cartas pertenecen al mismo escalón. La mano queda para el jugador que era mano al comenzar.
-
-> ⚠️ A CONFIRMAR: si cada jugador gana una de las primeras dos bazas y la tercera es parda, falta definir expresamente quién gana la mano.
+| A gana | B gana | B gana | B gana la mano |
+| A gana | B gana | Parda | A gana la mano (quien ganó la primera) |
 
 ## Truco
 
-El canto puede subir en tres niveles. Solo puede subirlo el jugador que no hizo el último canto. Ante un canto pendiente se puede querer, no querer o realizar una subida legal.
+El canto puede subir en tres niveles y se puede cantar en cualquier turno propio. Solo puede subirlo el jugador que no hizo el último canto. Ante un canto pendiente se puede querer, no querer, subir (lo que implica querer el canto anterior) o irse al mazo.
 
 | Estado aceptado | Valor de la mano | Si se rechaza ese canto |
 |---|---:|---:|
@@ -66,63 +60,49 @@ El canto puede subir en tres niveles. Solo puede subirlo el jugador que no hizo 
 | Retruco | 3 | 2 para quien cantó Retruco |
 | Vale cuatro | 4 | 3 para quien cantó Vale cuatro |
 
-Ejemplo: A canta Truco y B quiere. Más tarde B canta Retruco y A dice No quiero. B recibe 2 puntos, el nivel anterior aceptado.
-
-> ⚠️ A CONFIRMAR: qué valor se considera “Truco en juego” al irse al mazo mientras hay una subida pendiente todavía no aceptada.
+"No quiero" o irse al mazo con una subida pendiente: el rival cobra el **último nivel aceptado** (1 si no había truco querido).
 
 ## Envido
 
-El envido solo puede cantarse durante la primera baza y antes de que el jugador que canta haya tirado su primera carta. Existen Envido, Real Envido y Falta Envido; se permiten Envido-Envido y combinaciones entre cantos.
+El envido solo puede cantarse durante la primera baza y antes de que **el que canta** haya tirado su carta. El pie puede cantar después de que el mano tiró la suya. No se puede cantar envido si ya hay un truco querido, ni volver a cantar una vez resuelto.
 
-> ⚠️ A CONFIRMAR: enumerar las cadenas legales completas, incluidos el máximo de Envidos consecutivos y desde qué cantos se puede subir a Real Envido o Falta Envido.
+Cadenas legales: `E`, `E-E` (máximo dos envidos), `R`, `E-R`, `E-E-R`, y `F` después de cualquiera de ellas (o sola). Real envido una sola vez. Solo sube quien responde.
 
 ### Cálculo del valor
 
-Para calcular el envido:
+1. Si hay al menos dos cartas del mismo palo, se toman las dos de mayor valor de ese palo y se suman 20.
+2. 10, 11 y 12 valen 0; las demás cartas valen su número.
+3. Si no hay dos cartas del mismo palo, se usa el valor más alto de una carta.
+4. Si ambos jugadores tienen el mismo valor, gana el mano.
 
-1. si hay al menos dos cartas del mismo palo, se toman dos de ese palo y se suman 20 más sus valores de envido;
-2. 10, 11 y 12 valen 0; las demás cartas valen su número;
-3. si no hay dos cartas del mismo palo, se usa el valor de envido más alto de una carta;
-4. si ambos jugadores tienen el mismo valor, gana el mano.
-
-Ejemplos:
-
-- 7 y 6 del mismo palo valen 33.
-- 12 y 5 del mismo palo valen 25.
-- 7 de oro, 6 de copa y 4 de basto valen 7.
-- Si ambos anuncian 29, gana el mano.
+Ejemplos: 7 y 6 del mismo palo valen 33; 12 y 5 del mismo palo valen 25; 7 de oro, 6 de copa y 4 de basto valen 7.
 
 Cuando el envido es querido, los dos valores pasan a ser públicos en la observación.
 
 ### Puntaje
 
-| Resolución | Puntaje |
-|---|---|
-| No quiero | Puntos acumulados antes del último canto, con mínimo de 1 |
-| Envido querido | ⚠️ A CONFIRMAR |
-| Envido-Envido querido | ⚠️ A CONFIRMAR |
-| Real Envido querido, solo o combinado | ⚠️ A CONFIRMAR |
-| Falta Envido querida | Lo que le falta al jugador que va ganando para alcanzar el puntaje objetivo |
+| Cadena | Querido | No querido |
+|---|---:|---:|
+| E | 2 | 1 |
+| E-E | 4 | 2 |
+| R | 3 | 1 |
+| E-R | 5 | 2 |
+| E-E-R | 7 | 4 |
+| F | falta | 1 |
+| X-F | falta | lo querible de X (E-F = 2, E-E-F = 4, R-F = 3, E-R-F = 5, E-E-R-F = 7) |
 
-> ⚠️ A CONFIRMAR: definir los valores sumados por Envido y Real Envido, y publicar una tabla exhaustiva de aceptación y rechazo para cada cadena legal.
+Regla general del "no quiero": lo querible de la cadena sin su último canto, con mínimo 1.
 
-> ⚠️ A CONFIRMAR: definir Falta Envido cuando el marcador está empatado y confirmar la fórmula para partidas a 15 y a 30.
-
-En el adaptador de entrenamiento de una sola mano, Falta Envido usa un valor fijo configurable porque no existe un marcador de partida.
+**Falta envido** = objetivo − puntaje del que va ganando (con empate, el mismo cálculo). En el adaptador de entrenamiento de una sola mano se usa `RulesConfig.falta_envido_fixed`.
 
 ## Prioridad del envido
 
-“El envido está primero”: si un jugador canta Truco en la primera baza, el rival puede responder con Envido antes de contestar el Truco.
-
-> ⚠️ A CONFIRMAR: flujo exacto para reanudar el Truco después de resolver el Envido y acciones permitidas mientras ambos cantos están pendientes.
-
-> ⚠️ A CONFIRMAR: confirmar que el segundo jugador puede cantar Envido después de que el primero haya tirado una carta, siempre que todavía no haya tirado la propia.
+"El envido está primero": ante un truco en la primera baza (sin truco querido todavía), quien responde puede cantar envido si todavía no tiró su carta. El truco queda suspendido; mientras el envido está pendiente no se puede cantar truco. Resuelto el envido, el mismo jugador vuelve a responder el truco (quiero, no quiero, retruco o mazo).
 
 ## Irse al mazo
 
-Irse al mazo está disponible en cada turno propio. La mano termina y el rival recibe los puntos del Truco en juego. `RulesConfig` controla si corresponde agregar 1 punto de envido.
+Disponible en cada turno propio. La mano termina y el rival recibe:
 
-> ⚠️ A CONFIRMAR: estados exactos en los que se agrega ese punto de envido y valor predeterminado de la opción.
-
-> ⚠️ A CONFIRMAR: puntaje cuando alguien se va al mazo con un canto de Truco, Envido o ambos pendiente de respuesta.
-
+1. si hay un envido pendiente, los puntos de "no quiero" de esa cadena;
+2. si `RulesConfig.fold_envido_bonus` (por defecto activado), 1 punto de envido extra cuando se va en la primera baza, el envido nunca se cantó y no hay truco querido;
+3. los puntos del truco al último nivel aceptado (un truco pendiente cuenta como "no quiero").

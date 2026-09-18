@@ -1,0 +1,15 @@
+# Torneo básico de la fase 3: random vs heurístico con repartos espejados.
+name: tournament_basic
+seed: 20260918
+pairs: 1000
+confidence: 0.95
+rules:
+  target_score: 15
+  fold_envido_bonus: true
+agents:
+  - id: random
+    type: random
+  - id: heuristic
+    type: heuristic
+    params: {}
+output_dir: reports/tournament_basic

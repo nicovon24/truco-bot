@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.hypothesis/
+*.egg-info/
+dist/
+build/
+
+# Node
+node_modules/
+.next/
+.pnpm-store/
+*.tsbuildinfo
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Modelos y artefactos (solo metadata.json en git)
+models/**/*
+!models/**/
+!models/**/metadata.json
+!models/.gitkeep
+*.onnx
+*.msgpack
+*.pt
+checkpoints/
+runs/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Claude Code / skills: binarios y configuración local
+.claude/settings.local.json
+.claude/skills/*/scripts/bin/
+.agents/skills/*/scripts/bin/
+.model_cache/

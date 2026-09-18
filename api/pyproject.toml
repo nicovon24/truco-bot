@@ -1,0 +1,22 @@
+[project]
+name = "truco-api"
+version = "0.1.0"
+description = "API de partidas e inferencia de Truco."
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "truco-engine",
+    "fastapi>=0.115",
+    "pydantic>=2.8",
+    "pydantic-settings>=2.4",
+    "uvicorn[standard]>=0.30",
+]
+
+[tool.uv.sources]
+truco-engine = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
