@@ -1,0 +1,17 @@
+# Fase 7: MCCFR tabular sobre una mano de truco sin envido.
+name: mccfr_truco_sin_envido
+algorithm: mccfr
+seed: 20260918
+iterations: 150000
+eval_every: 25000
+checkpoint_every: 50000
+game:
+  name: truco_hand
+  variant: sin_envido
+  falta_envido: 6
+  eval_hands: 300
+  eval_seed: 777
+mccfr:
+  regret_matching_plus: true
+  linear_averaging: true
+output_dir: runs/mccfr_truco_sin_envido

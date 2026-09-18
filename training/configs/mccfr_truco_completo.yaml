@@ -1,0 +1,17 @@
+# Fase 7: MCCFR tabular sobre una mano de truco completa (truco + envido).
+name: mccfr_truco_completo
+algorithm: mccfr
+seed: 20260918
+iterations: 60000
+eval_every: 10000
+checkpoint_every: 30000
+game:
+  name: truco_hand
+  variant: completo
+  falta_envido: 6
+  eval_hands: 300
+  eval_seed: 777
+mccfr:
+  regret_matching_plus: true
+  linear_averaging: true
+output_dir: runs/mccfr_truco_completo
