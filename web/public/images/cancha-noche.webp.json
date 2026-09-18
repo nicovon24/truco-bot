@@ -1,0 +1,8 @@
+{
+  "prompt": "Use case: stylized-concept. Asset type: original background illustration for Truco Bot, an Argentine card game web application. Create a premium hand-painted digital illustration, panoramic landscape 1536x1024 or wider, of a small Argentine neighborhood football stadium at blue hour. View from field level, broad symmetrical curved terraces around a dark teal green pitch, rich deep navy sky, a warm peach sunset thin on the horizon, pale sky-blue and cream flags and pennants, small distant supporters, tall floodlights on far left and right with warm ivory light, trees and modest neighborhood rooftops beyond. Sophisticated sports poster / illustrated game environment, tactile brushwork and crisp architectural silhouettes, restrained beautiful details, evocative and atmospheric. The central 55 percent of image must be quiet dark empty sky and field, with interest toward the outer edges, to accommodate game UI layered above. Lower half dark petrol green. No playing cards, no table, no characters in foreground, no text, no logos, no UI, no frames, no trophy, no watermark. Unique original setting, not a copy of any existing game.",
+  "tool": "image_gen (built-in)",
+  "purpose": "Original illustrated background for Truco Bot; decorative, not a real venue.",
+  "source": "Generated for this repository on 2026-09-18",
+  "processing": "Converted to WebP at quality 85; 1536 × 1024",
+  "createdAt": "2026-09-18T17:50:40.034Z"
+}

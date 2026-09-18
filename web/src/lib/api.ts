@@ -46,10 +46,14 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const api = {
   agents: () => request<Agent[]>("/agents"),
-  createGame: (agentId: string, seed?: number) =>
+  createGame: (agentId: string, targetScore: 15 | 30, seed?: number) =>
     request<Game>("/games", {
       method: "POST",
-      body: JSON.stringify({ agent_id: agentId, seed: seed ?? null }),
+      body: JSON.stringify({
+        agent_id: agentId,
+        seed: seed ?? null,
+        target_score: targetScore,
+      }),
     }),
   game: (id: string) => request<Game>(`/games/${id}`),
   play: (id: string, action: number) =>

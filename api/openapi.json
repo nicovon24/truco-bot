@@ -407,6 +407,15 @@
               }
             ],
             "title": "Seed"
+          },
+          "target_score": {
+            "type": "integer",
+            "enum": [
+              15,
+              30
+            ],
+            "title": "Target Score",
+            "default": 15
           }
         },
         "type": "object",

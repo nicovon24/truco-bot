@@ -1,126 +1,197 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-import { Palo } from "@/components/Naipe";
+import Link from "next/link";
+import { Icon } from "@/components/Icon";
+import { Naipe, Dorso } from "@/components/Naipe";
+import { Rules } from "@/components/Overlay";
 import { useGame } from "@/store/game";
 
-/** Pantalla de entrada: la cartelera de la sede con los rivales disponibles. */
-export function Cartelera() {
-  const { agents, agentsStatus, agentId, busy, error, loadAgents, selectAgent, newGame } = useGame();
-  const [seed, setSeed] = useState("");
+function technicalLabel(type: string): string {
+  if (type === "random") return "Por dentro: decisiones aleatorias.";
+  if (type === "heuristic")
+    return "Por dentro: reglas programadas (heurísticas).";
+  if (type === "tabular")
+    return "Por dentro: CFR tabular entrenado sin envido.";
+  if (type === "neural") return "Por dentro: una red neuronal entrenada.";
+  return `Por dentro: modelo ${type}.`;
+}
 
+export function Cartelera() {
+  const {
+    agents,
+    agentsStatus,
+    agentId,
+    targetScore,
+    busy,
+    error,
+    loadAgents,
+    selectAgent,
+    selectTargetScore,
+    newGame,
+  } = useGame();
+  const [seed, setSeed] = useState("");
+  const [rules, setRules] = useState(false);
   useEffect(() => {
     if (agentsStatus === "idle") void loadAgents();
   }, [agentsStatus, loadAgents]);
-
   const seedValue = seed.trim() === "" ? undefined : Number(seed);
-  const seedInvalid = seedValue !== undefined && (!Number.isInteger(seedValue) || seedValue < 0);
+  const seedInvalid =
+    seedValue !== undefined &&
+    (!Number.isSafeInteger(seedValue) || seedValue < 0);
+  const selected = agents.find((a) => a.id === agentId);
 
   return (
-    <main className="pared flex min-h-dvh flex-col items-center px-4 pb-10 pt-8">
-      <header className="w-full max-w-md">
-        <div className="chapa relative rounded-xl px-5 py-4 text-center">
-          <span className="remache absolute left-2 top-2" />
-          <span className="remache absolute right-2 top-2" />
-          <h1 className="text-4xl font-[900] uppercase leading-none tracking-[0.02em] [font-stretch:125%]">
-            Truco Bot
-          </h1>
-          <p className="mt-2 text-sm font-[500] text-tubo/85">
-            Sentate a la mesa. Uno contra uno, a 15.
-          </p>
-        </div>
-        <div className="mt-3 flex justify-center gap-3" aria-hidden="true">
-          {(["espada", "basto", "oro", "copa"] as const).map((s) => (
-            <Palo key={s} suit={s} className="h-6 w-6" />
-          ))}
-        </div>
-      </header>
-
-      <section aria-labelledby="rivales" className="mt-8 w-full max-w-md">
-        <h2 id="rivales" className="text-lg font-[800] uppercase tracking-[0.08em] [font-stretch:115%]">
-          ¿Contra quién jugás?
-        </h2>
-
-        {agentsStatus === "loading" && <p className="mt-3 text-sm">Buscando rivales en la sede…</p>}
-
-        {agentsStatus === "error" && (
-          <div className="mt-3 rounded-lg border-2 border-chapa bg-naipe p-4 text-sm" role="alert">
-            <p>{error}</p>
-            <button
-              type="button"
-              onClick={() => void loadAgents()}
-              className="mt-3 rounded-md bg-chapa px-4 py-2 font-[700] text-tubo"
-            >
-              Reintentar
-            </button>
-          </div>
-        )}
-
-        {agentsStatus === "ready" && (
-          <ul className="mt-3 space-y-3" role="radiogroup" aria-labelledby="rivales">
-            {agents.map((agent, i) => {
-              const checked = agent.id === agentId;
-              return (
-                <li key={agent.id}>
-                  <button
-                    type="button"
-                    role="radio"
-                    aria-checked={checked}
-                    onClick={() => selectAgent(agent.id)}
-                    className={`w-full rounded-lg bg-naipe px-4 py-3 text-left shadow-[0_6px_14px_-10px_rgb(0_0_0/0.8)] transition-transform duration-200 ease-out ${
-                      checked ? "ring-[3px] ring-chapa" : "ring-1 ring-black/10 hover:-translate-y-0.5"
-                    }`}
-                    style={{ rotate: `${i % 2 === 0 ? -0.6 : 0.5}deg` }}
-                  >
-                    <span className="flex items-baseline justify-between gap-3">
-                      <span className="text-xl font-[800] [font-stretch:110%]">{agent.name}</span>
-                      <span className="text-xs font-[600] uppercase tracking-[0.12em] text-zocalo">
-                        {checked ? "Elegido" : agent.type}
-                      </span>
-                    </span>
-                    <span className="mt-1 block text-sm leading-snug text-tinta/80">{agent.description}</span>
-                    {agent.model_version && (
-                      <span className="mt-1 block text-xs text-tinta/60">Modelo v{agent.model_version}</span>
-                    )}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </section>
-
-      <section className="mt-8 w-full max-w-md rounded-lg bg-naipe p-4 shadow-[0_10px_20px_-14px_rgb(0_0_0/0.8)] ring-1 ring-black/10">
-        <label htmlFor="semilla" className="block text-sm font-[650] text-tinta">
-          Semilla (opcional, para repetir un reparto)
-        </label>
-        <input
-          id="semilla"
-          inputMode="numeric"
-          value={seed}
-          onChange={(e) => setSeed(e.target.value)}
-          placeholder="Al azar"
-          aria-invalid={seedInvalid}
-          className="mt-1 w-full rounded-md bg-tubo px-3 py-2.5 text-base text-tinta ring-1 ring-black/15 placeholder:text-tinta/45"
-        />
-        {seedInvalid && <p className="mt-1 text-sm font-[650] text-chapa">La semilla tiene que ser un entero positivo.</p>}
-
-        {error && agentsStatus === "ready" && (
-          <p className="mt-3 rounded-md bg-naipe p-3 text-sm text-chapa" role="alert">
-            {error}
-          </p>
-        )}
-
+    <main className="arena lobby">
+      <header className="app-header">
+        <Link href="/" className="wordmark" aria-label="Truco Bot, inicio">
+          <Icon name="cards" />
+          <span>TRUCO BOT</span>
+        </Link>
         <button
           type="button"
-          disabled={!agentId || busy || seedInvalid}
-          onClick={() => void newGame(seedValue)}
-          className="chapa mt-4 w-full rounded-lg py-4 text-xl font-[800] uppercase tracking-[0.06em] [font-stretch:115%] transition-[filter,transform] duration-150 active:translate-y-px disabled:opacity-55 enabled:hover:brightness-110"
+          className="utility-button"
+          onClick={() => setRules(true)}
         >
-          {busy ? "Repartiendo…" : "Repartir"}
+          <Icon name="book" />
+          <span>Cómo se juega</span>
         </button>
-      </section>
+      </header>
+      <div className="lobby-content">
+        <div className="lobby-emblem" aria-hidden="true">
+          <span />
+          <Icon name="star" />
+          <Icon name="star" />
+          <Icon name="star" />
+          <span />
+        </div>
+        <h1 className="lobby-title">
+          TRUCO<span>DE UNA.</span>
+        </h1>
+        <p className="lobby-intro">El de siempre. Un rival que no se cansa.</p>
+        <div className="lobby-cards" aria-hidden="true">
+          <Dorso size="hero" className="hero-back" />
+          <Naipe
+            size="hero"
+            card={{ id: 0, number: 1, suit: "espada", label: "1 de espada" }}
+            className="hero-front"
+          />
+        </div>
+        <section className="match-setup" aria-label="Preparar partida">
+          <div className="opponent-heading">
+            <label htmlFor="rival">Elegí tu rival</label>
+            <span>1 vs. 1 · Tres niveles</span>
+          </div>
+          <div className="opponent-select">
+            <Icon name="user" />
+            <select
+              id="rival"
+              value={agentId ?? ""}
+              disabled={agentsStatus !== "ready" || busy}
+              onChange={(e) => selectAgent(e.target.value)}
+            >
+              {agentsStatus !== "ready" && (
+                <option value="">
+                  {agentsStatus === "error"
+                    ? "Sin conexión"
+                    : "Buscando rivales…"}
+                </option>
+              )}
+              {agentsStatus === "ready" && agents.length === 0 && (
+                <option value="">No hay rivales disponibles</option>
+              )}
+              {agents.map((agent) => (
+                <option key={agent.id} value={agent.id}>
+                  {agent.name}
+                </option>
+              ))}
+            </select>
+            <Icon name="chevron" />
+          </div>
+          {selected && (
+            <div className="opponent-description" aria-live="polite">
+              <p>{selected.description}</p>
+              <span>{technicalLabel(selected.type)}</span>
+            </div>
+          )}
+          <fieldset className="score-choice">
+            <legend>¿A cuántos puntos?</legend>
+            <div>
+              {([15, 30] as const).map((score) => (
+                <label key={score}>
+                  <input
+                    type="radio"
+                    name="target-score"
+                    value={score}
+                    checked={targetScore === score}
+                    onChange={() => selectTargetScore(score)}
+                    disabled={busy}
+                  />
+                  <span>
+                    <strong>{score} puntos</strong>
+                    <small>{score === 15 ? "Partida rápida" : "Partida completa"}</small>
+                  </span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          {error && (
+            <div className="error-message" role="alert">
+              <p>{error}</p>
+              {agentsStatus === "error" && (
+                <button type="button" onClick={() => void loadAgents()}>
+                  Reintentar conexión
+                </button>
+              )}
+            </div>
+          )}
+          <button
+            type="button"
+            className="primary-button play-button"
+            disabled={
+              !agentId || busy || seedInvalid || agentsStatus !== "ready"
+            }
+            onClick={() => void newGame(seedValue)}
+          >
+            <Icon name="cards" />
+            {busy ? "Repartiendo…" : `Jugar a ${targetScore}`}
+            <Icon name="arrow" />
+          </button>
+          <details className="seed-settings">
+            <summary>
+              Personalizar reparto <Icon name="chevron" />
+            </summary>
+            <div>
+              <label htmlFor="semilla">Semilla opcional</label>
+              <input
+                id="semilla"
+                inputMode="numeric"
+                placeholder="Al azar"
+                value={seed}
+                onChange={(e) => setSeed(e.target.value)}
+                aria-invalid={seedInvalid}
+                aria-describedby="seed-help"
+                disabled={busy}
+              />
+              <p id="seed-help">
+                {seedInvalid
+                  ? "Usá un número entero mayor o igual a cero."
+                  : "Misma semilla y mismo rival para repetir el comienzo."}
+              </p>
+            </div>
+          </details>
+        </section>
+        <p className="lobby-note">
+          Sin registro. Con envido, truco y un poco de farol.
+        </p>
+      </div>
+      <footer className="lobby-footer">
+        <span>Hecho para cantar fuerte.</span>
+        <span className="argentina-mark">
+          <i /> Truco argentino
+        </span>
+      </footer>
+      {rules && <Rules onClose={() => setRules(false)} />}
     </main>
   );
 }

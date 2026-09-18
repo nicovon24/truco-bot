@@ -21,6 +21,7 @@ class AgentOut(BaseModel):
 class CreateGameIn(BaseModel):
     agent_id: str
     seed: int | None = Field(default=None, ge=0, le=2**63 - 1)
+    target_score: Literal[15, 30] = 15
 
 
 class ActionIn(BaseModel):

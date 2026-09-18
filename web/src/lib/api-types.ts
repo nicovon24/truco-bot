@@ -167,6 +167,12 @@ export interface components {
             agent_id: string;
             /** Seed */
             seed?: number | null;
+            /**
+             * Target Score
+             * @default 15
+             * @enum {integer}
+             */
+            target_score: 15 | 30;
         };
         /** EnvidoOut */
         EnvidoOut: {

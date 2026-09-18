@@ -23,7 +23,7 @@ El rival no es un script de reglas escondido: cada decisión del bot trae su pol
 
 ## Operating Context
 
-- Una partida va a 15 puntos, con manos de hasta tres bazas y cantos de truco y envido.
+- Antes de repartir se elige una partida rápida a 15 puntos o completa a 30, con manos de hasta tres bazas y cantos de truco y envido.
 - El humano siempre es el asiento "human". La API responde con la observación, las acciones legales con su texto, el marcador y un log de eventos (acciones, resultado del envido, fin de mano, fin de partida).
 - Cuando termina una mano, el jugador ve el resultado y pide la siguiente (`POST /games/{id}/next-hand`).
 - Las partidas viven en memoria del servidor: un reinicio las pierde, y el cliente tiene que poder empezar otra.
@@ -46,7 +46,7 @@ El rival no es un script de reglas escondido: cada decisión del bot trae su pol
 
 ## Evidence on Hand
 
-- Hoy hay dos bots: random y heurístico (el heurístico le gana al random en el 95,2% de las partidas, ver `reports/tournament_basic`).
+- La interfaz presenta `random` como **Principiante**, `heuristic` como **Desafiante** y `cfr-sin-envido` como **Experimental**. Los nombres técnicos y el alcance de cada estrategia siguen visibles en la explicación. El heurístico le gana al random en el 95,2% de las partidas (ver `reports/tournament_basic`); CFR todavía no se presenta como un nivel superior.
 - No hay testimonios, usuarios ni métricas de uso. No inventarlos.
 
 ## Product Principles

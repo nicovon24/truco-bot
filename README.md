@@ -16,7 +16,7 @@ docker compose up --build   # API en http://localhost:8000 y web en http://local
 
 ## Cómo se juega en la app
 
-1. En la cartelera elegís rival y, opcionalmente, una semilla para repetir el reparto.
+1. En la cartelera elegís rival, partida a 15 o 30 puntos y, opcionalmente, una semilla para repetir el reparto.
 2. En la mesa tocás una carta para tirarla o cantás con las chapitas. Solo aparecen las acciones legales que manda la API; el front no conoce reglas.
 3. El bot responde con frases citadas («Quiero retruco»). En el tanteador, los palitos se anotan en cuadrados de cinco.
 4. Con **Análisis** prendido se ve la policy del bot: la probabilidad de cada acción y la que salió sorteada. Las cartas ocultas del bot nunca se nombran ([ADR 0014](docs/decisions/0014-textos-y-policy-desde-la-api.md)).

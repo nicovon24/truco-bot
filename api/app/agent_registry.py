@@ -150,9 +150,9 @@ class AgentRegistry:
                 entries.append(
                     AgentEntry(
                         id=meta.name,
-                        name=meta.name,
+                        name=_model_display_name(meta),
                         type=meta.type,
-                        description=meta.description,
+                        description=_model_description(meta),
                         model_version=meta.version,
                         factory=_model_factory(meta, artifact),
                     )
@@ -170,18 +170,38 @@ def builtin_agents() -> list[AgentEntry]:
     return [
         AgentEntry(
             id="random",
-            name="Random",
+            name="Principiante",
             type="random",
-            description="Elige uniformemente entre las acciones legales.",
+            description=(
+                "Nivel fácil. Juega al azar entre las opciones válidas: ideal para practicar."
+            ),
             model_version=None,
             factory=RandomAgent,
         ),
         AgentEntry(
             id="heuristic",
-            name="Heurístico",
+            name="Desafiante",
             type="heuristic",
-            description="Reglas fijas: envido con 27+, truco con mano fuerte y algún farol.",
+            description=(
+                "Nivel difícil. Usa una estrategia fija: mide el envido, cuida las cartas fuertes "
+                "y a veces farolea."
+            ),
             model_version=None,
             factory=HeuristicAgent,
         ),
     ]
+
+
+def _model_display_name(meta: ModelMetadata) -> str:
+    if meta.name == "cfr-sin-envido":
+        return "Experimental"
+    return meta.name.replace("-", " ").title()
+
+
+def _model_description(meta: ModelMetadata) -> str:
+    if meta.name == "cfr-sin-envido":
+        return (
+            "En prueba. Aprendió por simulación a jugar las cartas y el truco; "
+            "el envido lo resuelve con estrategia fija."
+        )
+    return meta.description

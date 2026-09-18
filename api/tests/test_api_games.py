@@ -26,8 +26,15 @@ def client(repo: InMemoryGameRepository) -> TestClient:
     return TestClient(app)
 
 
-def _create(client: TestClient, agent: str = "random", seed: int | None = 42) -> dict[str, Any]:
-    res = client.post("/games", json={"agent_id": agent, "seed": seed})
+def _create(
+    client: TestClient,
+    agent: str = "random",
+    seed: int | None = 42,
+    target_score: int = 15,
+) -> dict[str, Any]:
+    res = client.post(
+        "/games", json={"agent_id": agent, "seed": seed, "target_score": target_score}
+    )
     assert res.status_code == 201, res.text
     data: dict[str, Any] = res.json()
     return data
@@ -44,6 +51,7 @@ def test_agents(client: TestClient) -> None:
     assert res.status_code == 200
     ids = [a["id"] for a in res.json()]
     assert ids == ["random", "heuristic"]
+    assert [a["name"] for a in res.json()] == ["Principiante", "Desafiante"]
     assert all(a["model_version"] is None for a in res.json())
 
 
@@ -56,6 +64,17 @@ def test_create_game_and_get(client: TestClient, repo: InMemoryGameRepository) -
     assert len(repo) == 1
     again = client.get(f"/games/{game['id']}").json()
     assert again == game
+
+
+@pytest.mark.parametrize("target_score", [15, 30])
+def test_create_game_with_supported_score(client: TestClient, target_score: int) -> None:
+    game = _create(client, target_score=target_score)
+    assert game["target_score"] == target_score
+
+
+def test_create_game_rejects_unsupported_score(client: TestClient) -> None:
+    res = client.post("/games", json={"agent_id": "random", "target_score": 20})
+    assert res.status_code == 422
 
 
 def test_create_game_without_seed_registers_one(client: TestClient) -> None:

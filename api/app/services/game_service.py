@@ -104,7 +104,9 @@ class GameService:
 
     # -- API pública ---------------------------------------------------------
 
-    def create(self, agent_id: str, seed: int | None = None) -> GameRecord:
+    def create(
+        self, agent_id: str, seed: int | None = None, target_score: Literal[15, 30] = 15
+    ) -> GameRecord:
         entry = self.registry.get(agent_id)
         if entry is None:
             raise UnknownAgentError(agent_id)
@@ -115,7 +117,7 @@ class GameService:
             id=uuid.uuid4().hex,
             agent_id=agent_id,
             seed=seed,
-            state=new_game(RulesConfig(), deal_rng),
+            state=new_game(RulesConfig(target_score=target_score), deal_rng),
             bot=entry.factory(),
             deal_rng=deal_rng,
             bot_rng=Random(f"{seed}:bot"),

@@ -22,7 +22,7 @@ Service = Annotated[GameService, Depends(get_service)]
 @router.post("", status_code=status.HTTP_201_CREATED)
 def create_game(body: CreateGameIn, service: Service) -> GameOut:
     try:
-        record = service.create(body.agent_id, body.seed)
+        record = service.create(body.agent_id, body.seed, body.target_score)
     except UnknownAgentError as exc:
         raise HTTPException(
             status.HTTP_422_UNPROCESSABLE_CONTENT, f"agente desconocido: {exc}"
