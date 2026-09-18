@@ -43,3 +43,4 @@ Thumbs.db
 .claude/skills/*/scripts/bin/
 .agents/skills/*/scripts/bin/
 .model_cache/
+*.log

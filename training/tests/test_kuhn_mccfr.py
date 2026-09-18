@@ -72,7 +72,7 @@ def test_mccfr_converges_on_kuhn() -> None:
     assert late < early
     assert late < 0.02
     assert expected_returns(g, policy_strategy(policy))[0] == pytest.approx(GAME_VALUE_P0, abs=0.01)
-    assert len(solver.nodes) == 12
+    assert solver.num_infosets == 12
 
 
 def test_mccfr_is_reproducible() -> None:
@@ -93,7 +93,7 @@ def test_policy_and_checkpoint_roundtrip(tmp_path: Path) -> None:
     loaded, meta = TabularPolicy.load(path)
     assert meta == {"seed": 3}
     assert len(loaded) == 12
-    ckpt = tmp_path / "c.pkl"
+    ckpt = tmp_path / "c.npz"
     solver.save_checkpoint(ckpt)
     other = ExternalSamplingMCCFR(KuhnPoker())
     other.load_checkpoint(ckpt)

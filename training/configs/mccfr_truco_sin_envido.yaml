@@ -2,16 +2,18 @@
 name: mccfr_truco_sin_envido
 algorithm: mccfr
 seed: 20260918
-iterations: 150000
-eval_every: 25000
-checkpoint_every: 50000
+iterations: 60000
+eval_every: 15000
+checkpoint_every: 30000
 game:
   name: truco_hand
   variant: sin_envido
   falta_envido: 6
   eval_hands: 300
   eval_seed: 777
+  eval_min_visits: 20
 mccfr:
   regret_matching_plus: true
   linear_averaging: true
+  export_min_visits: 20
 output_dir: runs/mccfr_truco_sin_envido

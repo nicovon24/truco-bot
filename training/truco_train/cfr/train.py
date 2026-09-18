@@ -79,7 +79,7 @@ def run_mccfr(config: Mapping[str, Any], config_path: str | None = None) -> Path
     def on_step(it: int) -> None:
         row: dict[str, float] = {
             "iteration": it,
-            "infosets": len(solver.nodes),
+            "infosets": solver.num_infosets,
             "memory_mb": solver.memory_bytes() / 1e6,
             "seconds": time.perf_counter() - start,
         }
@@ -88,25 +88,30 @@ def run_mccfr(config: Mapping[str, Any], config_path: str | None = None) -> Path
         metrics.append(row)
         logger.info("mccfr %s", row)
         if checkpoint_every and it % checkpoint_every == 0:
-            solver.save_checkpoint(out / "checkpoints" / f"iter_{it:09d}.pkl", {"seed": seed})
+            solver.save_checkpoint(out / "checkpoints" / f"iter_{it:09d}.npz")
 
     solver.run(iterations, rng, callback=on_step, every=eval_every)
     if not metrics or metrics[-1]["iteration"] != solver.stats.iterations:
         on_step(solver.stats.iterations)
 
-    policy = solver.average_policy()
+    min_visits = int(mc.get("export_min_visits", 0))
+    policy = solver.average_policy(min_visits=min_visits)
     meta = {
         "name": config["name"],
         "game": dict(config["game"]),
         "seed": seed,
         "iterations": solver.stats.iterations,
+        "export_min_visits": min_visits,
+        "exported_infosets": len(policy),
         "commit": git_commit(),
     }
     policy.save(out / "policy.msgpack", meta)
     summary = {
         **run_info(config, config_path),
         "iterations": solver.stats.iterations,
-        "infosets": len(solver.nodes),
+        "infosets": solver.num_infosets,
+        "exported_infosets": len(policy),
+        "export_min_visits": min_visits,
         "elapsed_seconds": round(time.perf_counter() - start, 2),
         "metrics": metrics,
     }

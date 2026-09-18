@@ -109,7 +109,8 @@ def truco_hand_evaluator(game: TrucoHand, spec: Mapping[str, Any]) -> Any:
     seed = int(spec.get("eval_seed", 12345))
 
     def evaluate(solver: Any) -> dict[str, float]:
-        agent = TabularAgent(solver.average_policy(), game.variant, name="mccfr")
+        min_visits = int(spec.get("eval_min_visits", 0))
+        agent = TabularAgent(solver.average_policy(min_visits), game.variant, name="mccfr")
         payoff = mirrored_hand_payoff(game, agent, HeuristicAgent(), hands, seed)
         return {
             "payoff_vs_heuristic": payoff,
