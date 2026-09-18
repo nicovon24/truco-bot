@@ -44,7 +44,7 @@ class TrucoHandEnv(gym.Env[npt.NDArray[np.float32], int]):
         super().reset(seed=seed)
         if seed is not None:
             self.rng = Random(seed)
-        # Si el rival cierra la mano antes de que decida el agente, no hay decisión: se reparte otra.
+        # Si el rival cierra la mano antes de que decida el agente, se reparte otra.
         while True:
             self.seat = self.rng.randrange(2)
             self.opponent_name, self.opponent = self.pool.sample(self.rng)

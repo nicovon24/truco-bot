@@ -58,6 +58,30 @@ def export(
     typer.echo(f"Metadata escrita en {out}")
 
 
+@eval_app.command("curves")
+def curves(
+    runs: Annotated[list[Path], typer.Argument(help="Directorios de corridas con metrics.json.")],
+    out: Annotated[Path, typer.Option("--out", help="PNG de salida.")] = Path(
+        "reports/curves/curves.png"
+    ),
+) -> None:
+    """Curvas de payoff contra el heurístico a lo largo del entrenamiento."""
+    from truco_train.eval.plots import plot_curves
+
+    typer.echo(f"Gráfico escrito en {plot_curves(runs, out)}")
+
+
+@eval_app.command("exploit")
+def exploit(
+    config: Annotated[Path, typer.Option("--config", help="YAML de explotabilidad.", exists=True)],
+) -> None:
+    """Explotabilidad aproximada: un MaskablePPO explotador contra cada política congelada."""
+    from truco_train.eval.exploit import run_exploit
+
+    out = run_exploit(_load(config), config_path=config.as_posix())
+    typer.echo((out / "exploitability.md").read_text(encoding="utf-8"))
+
+
 @eval_app.command("tournament")
 def tournament(
     config: Annotated[Path, typer.Option("--config", help="YAML del torneo.", exists=True)],

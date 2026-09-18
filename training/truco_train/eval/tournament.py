@@ -73,6 +73,10 @@ def build_agent(spec: AgentSpec) -> Agent:
         from truco_engine.agents.tabular_agent import TabularAgent
 
         return TabularAgent.load(Path(spec.params["path"]), name=spec.id)
+    if spec.type == "neural":
+        from truco_engine.agents.neural_agent import NeuralAgent
+
+        return NeuralAgent.load(Path(spec.params["path"]), name=spec.id)
     raise ValueError(f"tipo de agente desconocido: {spec.type}")
 
 
@@ -219,6 +223,10 @@ def write_report(
         "results": [asdict(r) for r in results],
     }
     (out / "results.json").write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    if len(config.agents) > 2:
+        from truco_train.eval.plots import plot_matrix
+
+        plot_matrix(out / "results.json", out / "win_rates.png")
     return out
 
 
