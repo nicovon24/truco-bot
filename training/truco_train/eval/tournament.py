@@ -173,7 +173,10 @@ def _git_commit() -> str:
             ["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True, check=True
         )
         dirty = subprocess.run(
-            ["git", "status", "--porcelain"], capture_output=True, text=True, check=True
+            ["git", "status", "--porcelain", "--untracked-files=no"],
+            capture_output=True,
+            text=True,
+            check=True,
         )
     except (OSError, subprocess.CalledProcessError):
         return "unknown"
