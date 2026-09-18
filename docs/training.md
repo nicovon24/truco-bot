@@ -32,15 +32,17 @@ El rival se elige mediante pesos configurables entre checkpoints anteriores, el 
 
 Cada corrida parte de un YAML versionado en `training/configs/`. Como mínimo debe registrar algoritmo, variante del juego, semilla, presupuesto de entrenamiento, frecuencia de checkpoint, evaluación periódica y opciones específicas del algoritmo. Los valores efectivos, incluido cualquier override de CLI, se guardan junto al resultado.
 
-El contrato previsto de la CLI es:
+CLI implementada (`training/truco_train/cli.py`). No hay overrides por línea de comandos: toda variación es un YAML nuevo, así la config versionada es la efectiva.
 
 ```bash
-uv run truco-train train --config training/configs/<config>.yaml
+uv run truco-train train --config training/configs/<config>.yaml     # algorithm: mccfr | deep_cfr | ppo
+uv run truco-train export --config training/configs/<config>.yaml    # sección export: -> models/<nombre>/
 uv run truco-train eval tournament --config training/configs/<config>.yaml
-uv run truco-train export --config training/configs/<config>.yaml
+uv run truco-train eval curves runs/<corrida> [runs/<otra> ...] --out reports/curves/curves.png
+uv run truco-train eval exploit --config training/configs/<config>.yaml
 ```
 
-> ⚠️ A CONFIRMAR: nombres finales de los subcomandos y formato de overrides cuando se implemente `cli.py`.
+Configs actuales: `mccfr_kuhn`, `mccfr_truco_sin_envido`, `mccfr_truco_completo`, `deep_cfr_truco`, `ppo_truco`, `tournament_basic`, `tournament_full`, `exploitability`. Las corridas escriben en `runs/<nombre>/` (fuera de Git): `metrics.json` con procedencia (commit, contrato, config, semilla, plataforma) y los artefactos del algoritmo.
 
 ## Checkpoints y reanudación
 
@@ -52,5 +54,9 @@ La frecuencia y la política de retención se definen en el YAML; no hay un valo
 
 La estrategia promedio tabular se exporta a msgpack. Las redes se exportan a ONNX y deben superar una prueba de paridad numérica contra PyTorch con entradas representativas y máscaras legales. El exportador produce o completa `models/<nombre>/metadata.json` con tipo, versión, fecha, commit, config, semilla, versión del contrato, URL, checksum y evaluación.
 
-Los binarios se publican en S3 o GitHub Releases y nunca se agregan a Git. La tolerancia numérica de la prueba de paridad queda pendiente de definir durante la fase de exportación.
+Los binarios se publican en S3 o GitHub Releases y nunca se agregan a Git. La tolerancia de la prueba de paridad es un error absoluto máximo de `1e-4` sobre 256 entradas aleatorias en `[0, 1]` (`truco_train/export/to_onnx.py`). El exportador copia además el binario a `.model_cache/<nombre>/<versión>/` para que la API local lo sirva sin descargarlo.
+
+## Memoria de MCCFR tabular en truco
+
+Una mano de truco genera millones de information sets (≈4,2 M en `sin_envido` con 60 k iteraciones). Las tablas son un índice `clave -> fila` con matrices `float32` contiguas (≈460 bytes por information set con la clave incluida), y la política exportada conserva solo los information sets con al menos `export_min_visits` visitas. Fuera de la tabla, `TabularAgent` juega con el heurístico y cuenta el fallback. Ver ADR 0013.
 

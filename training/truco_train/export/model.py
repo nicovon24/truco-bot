@@ -96,7 +96,12 @@ def export_model(config: Mapping[str, Any], config_path: str | None = None) -> P
         "created_at": datetime.now(UTC).isoformat(timespec="seconds"),
         "commit": git_commit(),
         "seed": int(run.get("config", {}).get("seed", config.get("seed", 0))),
-        "config": {"train": run.get("config", {}), "export_config_path": config_path, **details},
+        "config": {
+            "train": run.get("config", {}),
+            "train_commit": run.get("commit"),
+            "export_config_path": config_path,
+            **details,
+        },
         "contract": {
             "version": CONTRACT_VERSION,
             "num_actions": NUM_ACTIONS,

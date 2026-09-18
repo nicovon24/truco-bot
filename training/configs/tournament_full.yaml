@@ -1,0 +1,27 @@
+# Fase 8/10: torneo todos contra todos con todos los bots, partidas completas a 15.
+# Requiere haber exportado los modelos (truco-train export) para que existan los artefactos.
+name: tournament_full
+seed: 20260919
+pairs: 200
+confidence: 0.95
+rules:
+  target_score: 15
+  fold_envido_bonus: true
+agents:
+  - id: random
+    type: random
+  - id: heuristic
+    type: heuristic
+  - id: cfr-sin-envido
+    type: tabular
+    params: {path: artifacts/cfr-sin-envido/0.1.0/policy.msgpack}
+  - id: cfr-completo
+    type: tabular
+    params: {path: artifacts/cfr-completo/0.1.0/policy.msgpack}
+  - id: deep-cfr
+    type: neural
+    params: {path: artifacts/deep-cfr/0.1.0/strategy.onnx}
+  - id: ppo
+    type: neural
+    params: {path: artifacts/ppo/0.1.0/strategy.onnx}
+output_dir: reports/tournament_full

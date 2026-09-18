@@ -8,6 +8,9 @@ on:
 jobs:
   python:
     runs-on: ubuntu-latest
+    env:
+      # Los binarios de models/ se publican aparte; la CI prueba la API sin modelos entrenados.
+      MODELS_DIR: /tmp/sin-modelos
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6

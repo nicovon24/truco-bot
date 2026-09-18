@@ -6,6 +6,9 @@ services:
     environment:
       CORS_ORIGINS: http://localhost:3000
       LOG_LEVEL: INFO
+    volumes:
+      # Artefactos exportados localmente (truco-train export); evita descargarlos al arrancar.
+      - ./.model_cache:/app/.model_cache
     ports:
       - "8000:8000"
     healthcheck:
