@@ -1,0 +1,27 @@
+# Fase 9: Deep CFR sobre una mano de truco completa.
+name: deep_cfr_truco
+algorithm: deep_cfr
+seed: 20260918
+eval_every: 5
+game:
+  name: truco_hand
+  variant: completo
+  falta_envido: 6
+  eval_hands: 300
+  eval_seed: 777
+deep_cfr:
+  iterations: 30
+  traversals: 300
+  hidden: 256
+  advantage_capacity: 200000
+  strategy_capacity: 300000
+  advantage_steps: 1500
+  strategy_steps: 5000
+  batch_size: 1024
+  learning_rate: 0.001
+output_dir: runs/deep_cfr_truco
+export:
+  name: deep-cfr
+  type: neural
+  version: 0.1.0
+  description: Deep CFR entrenado por self-play sobre manos completas (truco y envido).

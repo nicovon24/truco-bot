@@ -1,0 +1,34 @@
+# Fase 10: MaskablePPO con pool de rivales (snapshots propios, heurístico y random).
+name: ppo_truco
+algorithm: ppo
+seed: 20260918
+total_timesteps: 400000
+eval_every: 20
+game:
+  name: truco_hand
+  variant: completo
+  falta_envido: 6
+  eval_hands: 300
+  eval_seed: 777
+pool:
+  weights:
+    self: 0.5
+    heuristic: 0.35
+    random: 0.15
+  snapshot_every: 10
+  max_snapshots: 8
+ppo:
+  n_steps: 2048
+  batch_size: 256
+  n_epochs: 5
+  learning_rate: 0.0003
+  gamma: 1.0
+  gae_lambda: 0.95
+  ent_coef: 0.01
+  net_arch: [256, 256]
+output_dir: runs/ppo_truco
+export:
+  name: ppo
+  type: neural
+  version: 0.1.0
+  description: MaskablePPO contra un pool de rivales (snapshots propios, heurístico y random).

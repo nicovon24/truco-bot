@@ -17,3 +17,8 @@ mccfr:
   linear_averaging: true
   export_min_visits: 20
 output_dir: runs/mccfr_truco_sin_envido
+export:
+  name: cfr-sin-envido
+  type: tabular
+  version: 0.1.0
+  description: MCCFR tabular sobre una mano (sin_envido). Fuera de la tabla juega el heurístico.
