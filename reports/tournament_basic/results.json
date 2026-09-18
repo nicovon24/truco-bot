@@ -1,0 +1,45 @@
+{
+  "name": "tournament_basic",
+  "config_path": "training/configs/tournament_basic.yaml",
+  "commit": "a575f40",
+  "contract_version": "1",
+  "date": "2026-09-18T05:18:20+00:00",
+  "seed": 20260918,
+  "pairs": 1000,
+  "rules": {
+    "target_score": 15,
+    "flor": false,
+    "fold_envido_bonus": true,
+    "falta_envido_fixed": null
+  },
+  "agents": [
+    {
+      "id": "random",
+      "type": "random",
+      "params": {}
+    },
+    {
+      "id": "heuristic",
+      "type": "heuristic",
+      "params": {}
+    }
+  ],
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.2",
+  "elapsed_seconds": 5.27,
+  "results": [
+    {
+      "agent_a": "random",
+      "agent_b": "heuristic",
+      "pairs": 1000,
+      "games": 2000,
+      "wins_a": 95,
+      "wins_b": 1905,
+      "win_rate_a": 0.0475,
+      "ci_low": 0.03901402059617837,
+      "ci_high": 0.05772090719335553,
+      "mean_point_diff_a": -8.681,
+      "mean_hands": 9.255
+    }
+  ]
+}
